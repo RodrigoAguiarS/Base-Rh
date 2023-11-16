@@ -1,6 +1,5 @@
 package br.com.rodrigo.api.rest;
 
-import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
 import br.com.rodrigo.api.model.dto.UsuarioDto;
 import br.com.rodrigo.api.service.PessoaService;

@@ -6,6 +6,9 @@ import br.com.rodrigo.api.repository.UsuarioRepository;
 
 public class ValidatorUtil {
 
+    private static final String ERRO_CPF_DUPLICADO = "CPF já cadastrado. Por favor, insira um CPF único.";
+    private static final String ERRO_EMAIL_DUPLICADO = "E-mail já cadastrado. Por favor, insira um e-mail único.";
+
 
     private ValidatorUtil() {
     }
@@ -45,22 +48,36 @@ public class ValidatorUtil {
             String email,
             Long id
     ) {
-        if (id != null) {
-            if (pessoaRepository.existsByCpfAndIdNot(cpf, id)) {
-                throw new ViolocaoIntegridadeDadosException("CPF já cadastrado. Por favor, insira um CPF único.");
-            }
-
-            if (usuarioRepository.existsByEmailAndIdNot(email, id)) {
-                throw new ViolocaoIntegridadeDadosException("E-mail já cadastrado. Por favor, insira um e-mail único.");
-            }
+        if (isNotEmpty(id)) {
+            validarCpfExistenteComId(pessoaRepository, cpf, id);
+            validarEmailExistenteComId(usuarioRepository, email, id);
         } else {
-            if (pessoaRepository.existsByCpf(cpf)) {
-                throw new ViolocaoIntegridadeDadosException("CPF já cadastrado. Por favor, insira um CPF único.");
-            }
+            validarCpfExistente(pessoaRepository, cpf);
+            validarEmailExistente(usuarioRepository, email);
+        }
+    }
 
-            if (usuarioRepository.existsByEmail(email)) {
-                throw new ViolocaoIntegridadeDadosException("E-mail já cadastrado. Por favor, insira um e-mail único.");
-            }
+    private static void validarCpfExistenteComId(PessoaRepository pessoaRepository, String cpf, Long id) {
+        if (pessoaRepository.existsByCpfAndIdNot(cpf, id)) {
+            throw new ViolocaoIntegridadeDadosException(ERRO_CPF_DUPLICADO);
+        }
+    }
+
+    private static void validarEmailExistenteComId(UsuarioRepository usuarioRepository, String email, Long id) {
+        if (usuarioRepository.existsByEmailAndIdNot(email, id)) {
+            throw new ViolocaoIntegridadeDadosException(ERRO_EMAIL_DUPLICADO);
+        }
+    }
+
+    private static void validarCpfExistente(PessoaRepository pessoaRepository, String cpf) {
+        if (pessoaRepository.existsByCpf(cpf)) {
+            throw new ViolocaoIntegridadeDadosException(ERRO_CPF_DUPLICADO);
+        }
+    }
+
+    private static void validarEmailExistente(UsuarioRepository usuarioRepository, String email) {
+        if (usuarioRepository.existsByEmail(email)) {
+            throw new ViolocaoIntegridadeDadosException(ERRO_EMAIL_DUPLICADO);
         }
     }
 }
