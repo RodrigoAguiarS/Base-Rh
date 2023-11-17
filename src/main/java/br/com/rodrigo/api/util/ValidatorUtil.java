@@ -4,11 +4,10 @@ import br.com.rodrigo.api.exception.ViolocaoIntegridadeDadosException;
 import br.com.rodrigo.api.repository.PessoaRepository;
 import br.com.rodrigo.api.repository.UsuarioRepository;
 
+import static br.com.rodrigo.api.exception.ValidationError.ERRO_CPF_DUPLICADO;
+import static br.com.rodrigo.api.exception.ValidationError.ERRO_EMAIL_DUPLICADO;
+
 public class ValidatorUtil {
-
-    private static final String ERRO_CPF_DUPLICADO = "CPF já cadastrado. Por favor, insira um CPF único.";
-    private static final String ERRO_EMAIL_DUPLICADO = "E-mail já cadastrado. Por favor, insira um e-mail único.";
-
 
     private ValidatorUtil() {
     }
