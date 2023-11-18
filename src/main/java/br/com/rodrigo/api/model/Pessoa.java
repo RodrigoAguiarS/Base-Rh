@@ -2,11 +2,15 @@ package br.com.rodrigo.api.model;
 
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 @Data
@@ -31,4 +35,11 @@ public class Pessoa {
     @Column(name = "sexo")
     private String sexo;
 
+    @ManyToOne
+    @JoinColumn(name = "id_cargo")
+    private Cargo cargo;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_endereco")
+    private Endereco endereco;
 }
