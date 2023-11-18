@@ -3,7 +3,7 @@ package br.com.rodrigo.api.rest;
 import br.com.rodrigo.api.model.ResetarSenhaToken;
 import br.com.rodrigo.api.model.dto.EmailRecuperacaoDto;
 import br.com.rodrigo.api.model.dto.SenhaRecuperacaoDto;
-import br.com.rodrigo.api.service.ResetarEmailService;
+import br.com.rodrigo.api.service.ResetarSenhaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +20,17 @@ import java.util.Optional;
 @RequestMapping("api/")
 public class ResetarSenhaController {
 
-    private final ResetarEmailService resetarEmailService;
+    private final ResetarSenhaService resetarSenhaService;
 
     @PostMapping("/login-alterar")
     public ResponseEntity<?> solicitarRedefinicaoSenha(@RequestBody EmailRecuperacaoDto solicitacao) {
-        resetarEmailService.solicitarRedefinicaoSenha(solicitacao);
+        resetarSenhaService.solicitarRedefinicaoSenha(solicitacao);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/login-alterar/{uid}")
     public ResponseEntity<String> exibirPaginaRedefinicaoSenha(@PathVariable("uid") String uid) {
-        Optional<ResetarSenhaToken> tokenOptional = resetarEmailService.buscarTokenAtivoPorUid(uid);
+        Optional<ResetarSenhaToken> tokenOptional = resetarSenhaService.buscarTokenAtivoPorUid(uid);
         if (tokenOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
@@ -41,7 +41,7 @@ public class ResetarSenhaController {
     @PostMapping("/login-alterar/{uid}")
     public ResponseEntity<?> atualizarSenha(@PathVariable("uid") String uid,
                                             @RequestBody SenhaRecuperacaoDto solicitacao) {
-        resetarEmailService.atualizarSenha(uid, solicitacao);
+        resetarSenhaService.atualizarSenha(uid, solicitacao);
         return ResponseEntity.ok().build();
     }
 }

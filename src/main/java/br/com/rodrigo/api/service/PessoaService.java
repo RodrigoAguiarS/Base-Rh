@@ -11,7 +11,6 @@ import br.com.rodrigo.api.repository.PessoaRepository;
 import br.com.rodrigo.api.repository.UsuarioRepository;
 import br.com.rodrigo.api.util.ValidatorUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -10,7 +10,6 @@ public class ValidationError extends StandardError {
     public static final String ERRO_USUARIO_NAO_ENCONTRADO_PARA_EMAIL = "Usuário não encontrado para o e-mail: ";
     public static final String ERRO_USUARIO_NAO_ENCONTRADO = "Usuário não encontrado";
     public static final String ERRO_UID_EXPERIADO = "UID inválido ou expirado.";
-
     public static final String ERRO_ENVIAR_EMAIL = "Erro ao enviar o email para";
     public static final String ERRO_ATUALIZAR_SENHA_USUARIO_NAO_ENCONTRADO = "Erro ao atualizar a senha. Usuário não encontrado.";
 

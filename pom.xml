@@ -18,32 +18,39 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<!-- Spring Boot Starter for Data JPA -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
 		<dependency>
+			<!-- Spring Boot Starter for Validation -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
 		<dependency>
+			<!-- Spring Boot Starter for Security -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 			<version>2.3.8.RELEASE</version>
 		</dependency>
 
 		<dependency>
+			<!-- JSON Web Token (JWT) -->
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
 
 		<dependency>
+			<!-- Spring Boot Starter for Web -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
 		<dependency>
+			<!-- Spring Boot DevTools -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
@@ -64,39 +71,61 @@
 		</dependency>
 
 		<dependency>
+			<!-- ModelMapper -->
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>2.4.4</version>
 		</dependency>
 
 		<dependency>
+			<!-- PostgreSQL JDBC Driver -->
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
 		<dependency>
+			<!-- Project Lombok -->
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
 
 		<dependency>
+			<!-- Swagger 2 -->
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
 			<version>2.9.2</version>
 		</dependency>
 
 		<dependency>
+			<!-- Springdoc OpenAPI UI -->
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.6.1</version>
-		 </dependency>
-		 
+		</dependency>
+
 		<dependency>
+			<!-- Spring Boot Starter for Testing -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- SLF4J -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.32</version>
+		</dependency>
+
+		<!-- Logback (implementação padrão para SLF4J) -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.6</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

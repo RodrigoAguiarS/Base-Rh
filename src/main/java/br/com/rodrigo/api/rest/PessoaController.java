@@ -2,6 +2,7 @@ package br.com.rodrigo.api.rest;
 
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
 import br.com.rodrigo.api.model.dto.UsuarioDto;
+import br.com.rodrigo.api.service.EmailService;
 import br.com.rodrigo.api.service.PessoaService;
 import br.com.rodrigo.api.util.ValidatorUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
+import static br.com.rodrigo.api.util.EmailMensagensUtil.CONFIRMACAO_CADASTRO;
+import static br.com.rodrigo.api.util.EmailMensagensUtil.getEmailCadastroTexto;
+
 
 @RestController
 @RequestMapping("/api/pessoas")
@@ -29,9 +33,14 @@ public class PessoaController {
 
     private final PessoaService pessoaService;
 
+    private final EmailService emailService;
+
     @PostMapping
     public ResponseEntity<UsuarioDto> criarUsuario(@RequestBody @Valid CadastroUsuarioDto cadastroUsuarioDto) {
         UsuarioDto novoUsuarioDto = pessoaService.criarUsuario(cadastroUsuarioDto);
+        String mensagemEmail = getEmailCadastroTexto(cadastroUsuarioDto.getPessoa().getNome(),
+                cadastroUsuarioDto.getEmail(), cadastroUsuarioDto.getSenha());
+        emailService.sendEmail(cadastroUsuarioDto.getEmail(), CONFIRMACAO_CADASTRO, mensagemEmail);
         return new ResponseEntity<>(novoUsuarioDto, HttpStatus.CREATED);
     }
 
