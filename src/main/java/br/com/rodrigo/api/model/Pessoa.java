@@ -35,10 +35,6 @@ public class Pessoa {
     @Column(name = "sexo")
     private String sexo;
 
-    @ManyToOne
-    @JoinColumn(name = "id_cargo")
-    private Cargo cargo;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco")
     private Endereco endereco;

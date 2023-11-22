@@ -3,6 +3,7 @@ package br.com.rodrigo.api.model.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -33,4 +34,7 @@ public class PessoaDto {
     private String dataNascimento;
 
     private String sexo;
+
+    @Valid
+    private EnderecoDto endereco;
 }

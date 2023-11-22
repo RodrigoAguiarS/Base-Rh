@@ -1,6 +1,5 @@
 package br.com.rodrigo.api.model.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,5 +19,8 @@ public class UsuarioDto {
         this.email = email;
         this.nome = nome;
 
+    }
+
+    public static class DepartamentoCargoDto {
     }
 }

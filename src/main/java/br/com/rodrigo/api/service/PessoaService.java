@@ -2,11 +2,14 @@ package br.com.rodrigo.api.service;
 
 import br.com.rodrigo.api.exception.ObjetoNaoEncontradoException;
 import br.com.rodrigo.api.exception.ViolocaoIntegridadeDadosException;
+import br.com.rodrigo.api.model.Endereco;
 import br.com.rodrigo.api.model.Perfil;
 import br.com.rodrigo.api.model.Pessoa;
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
+import br.com.rodrigo.api.model.dto.EnderecoDto;
 import br.com.rodrigo.api.model.dto.UsuarioDto;
+import br.com.rodrigo.api.repository.EnderecoRepository;
 import br.com.rodrigo.api.repository.PessoaRepository;
 import br.com.rodrigo.api.repository.UsuarioRepository;
 import br.com.rodrigo.api.util.ValidatorUtil;
@@ -33,6 +36,8 @@ public class PessoaService {
 
     private final PessoaRepository pessoaRepository;
 
+    private final EnderecoRepository enderecoRepository;
+
     private final ModelMapper modelMapper;
 
     public UsuarioDto criarUsuario(CadastroUsuarioDto cadastroUsuarioDto) {
@@ -49,6 +54,7 @@ public class PessoaService {
         String cpf = cadastroUsuarioDto.getPessoa().getCpf();
         String email = cadastroUsuarioDto.getEmail();
         validarCpfEmailUnico(pessoaRepository, usuarioRepository, cpf, email, null);
+        novaPessoa.setEndereco(salvarEndereco(cadastroUsuarioDto));
         return pessoaRepository.save(novaPessoa);
     }
 
@@ -68,6 +74,11 @@ public class PessoaService {
         usuarioDto.setNome(usuario.getPessoa().getNome());
         usuarioDto.setPerfis(usuario.getPerfis().stream().map(Perfil::getDescricao).collect(Collectors.toSet()));
         return usuarioDto;
+    }
+
+    private Endereco salvarEndereco(CadastroUsuarioDto cadastroUsuarioDto) {
+        Endereco endereco = modelMapper.map(cadastroUsuarioDto.getPessoa().getEndereco(), Endereco.class);
+        return enderecoRepository.save(endereco);
     }
 
     public UsuarioDto atualizarUsuario(Long id, CadastroUsuarioDto cadastroUsuarioDto) {

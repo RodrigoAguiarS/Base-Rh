@@ -1,5 +1,6 @@
 package br.com.rodrigo.api.rest;
 
+import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
 import br.com.rodrigo.api.model.dto.UsuarioDto;
 import br.com.rodrigo.api.service.EmailService;
@@ -71,6 +72,12 @@ public class PessoaController {
         String email = authentication.getName();
         List<String> roles = pessoaService.obterPerfis(email);
         return ResponseEntity.ok(roles);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
+        List<Usuario> usuarios = pessoaService.listarUsuarios();
+        return ResponseEntity.ok(usuarios);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN_GERAL')")
