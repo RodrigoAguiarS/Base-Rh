@@ -56,4 +56,10 @@ public class DepartamentoController {
         departamentoService.deleteDepartamento(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/{id}/responsaveis/{idFuncionario}")
+    public ResponseEntity<Void> vincularResponsavel(@PathVariable Long id, @PathVariable Long idFuncionario) {
+        departamentoService.vincularResponsavel(id, idFuncionario);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }

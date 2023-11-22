@@ -8,6 +8,7 @@ import br.com.rodrigo.api.model.Pessoa;
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
 import br.com.rodrigo.api.model.dto.EnderecoDto;
+import br.com.rodrigo.api.model.dto.PessoaDto;
 import br.com.rodrigo.api.model.dto.UsuarioDto;
 import br.com.rodrigo.api.repository.EnderecoRepository;
 import br.com.rodrigo.api.repository.PessoaRepository;
@@ -18,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,9 +40,8 @@ public class PessoaService {
 
     private final EnderecoRepository enderecoRepository;
 
-    private final ModelMapper modelMapper;
 
-    public UsuarioDto criarUsuario(CadastroUsuarioDto cadastroUsuarioDto) {
+    public UsuarioDto criarUsuario(CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
         Pessoa pessoaSalva = salvarNovaPessoa(cadastroUsuarioDto);
         Set<Perfil> perfis = cadastroUsuarioDto.getPerfis().stream()
                 .map(idPerfil -> Perfil.toEnum(idPerfil.getId()))
@@ -49,8 +50,8 @@ public class PessoaService {
         return construirUsuarioDTO(novoUsuario);
     }
 
-    private Pessoa salvarNovaPessoa(CadastroUsuarioDto cadastroUsuarioDto) {
-        Pessoa novaPessoa = modelMapper.map(cadastroUsuarioDto.getPessoa(), Pessoa.class);
+    private Pessoa salvarNovaPessoa(CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
+        Pessoa novaPessoa = PessoaDto.toEntity(cadastroUsuarioDto.getPessoa());
         String cpf = cadastroUsuarioDto.getPessoa().getCpf();
         String email = cadastroUsuarioDto.getEmail();
         validarCpfEmailUnico(pessoaRepository, usuarioRepository, cpf, email, null);
@@ -58,8 +59,8 @@ public class PessoaService {
         return pessoaRepository.save(novaPessoa);
     }
 
-    private Usuario criarNovoUsuario(CadastroUsuarioDto cadastroUsuarioDto, Pessoa pessoa, Set<Perfil> perfis) {
-        Usuario novoUsuario = modelMapper.map(cadastroUsuarioDto, Usuario.class);
+    private Usuario criarNovoUsuario(CadastroUsuarioDto cadastroUsuarioDto, Pessoa pessoa, Set<Perfil> perfis) throws ParseException {
+        Usuario novoUsuario = CadastroUsuarioDto.toEntity(cadastroUsuarioDto);
         novoUsuario.setPessoa(pessoa);
         novoUsuario.setSenha(passwordEncoder.encode(cadastroUsuarioDto.getSenha()));
         novoUsuario.setPerfis(perfis);
@@ -68,20 +69,15 @@ public class PessoaService {
     }
 
     private UsuarioDto construirUsuarioDTO(Usuario usuario) {
-        UsuarioDto usuarioDto = new UsuarioDto();
-        usuarioDto.setId(usuario.getId());
-        usuarioDto.setEmail(usuario.getEmail());
-        usuarioDto.setNome(usuario.getPessoa().getNome());
-        usuarioDto.setPerfis(usuario.getPerfis().stream().map(Perfil::getDescricao).collect(Collectors.toSet()));
-        return usuarioDto;
+        return UsuarioDto.fromEntity(usuario);
     }
 
     private Endereco salvarEndereco(CadastroUsuarioDto cadastroUsuarioDto) {
-        Endereco endereco = modelMapper.map(cadastroUsuarioDto.getPessoa().getEndereco(), Endereco.class);
+        Endereco endereco = EnderecoDto.toEntity(cadastroUsuarioDto.getPessoa().getEndereco());
         return enderecoRepository.save(endereco);
     }
 
-    public UsuarioDto atualizarUsuario(Long id, CadastroUsuarioDto cadastroUsuarioDto) {
+    public UsuarioDto atualizarUsuario(Long id, CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
         Usuario usuarioExistente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_USUARIO_NAO_ENCONTRADO));
 
@@ -102,17 +98,21 @@ public class PessoaService {
         return construirUsuarioDTO(usuarioAtualizado);
     }
 
-    private Pessoa atualizarPessoaExistente(Pessoa pessoaExistente, CadastroUsuarioDto cadastroUsuarioDto) {
+    private Pessoa atualizarPessoaExistente(Pessoa pessoaExistente, CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
         String cpf = cadastroUsuarioDto.getPessoa().getCpf();
         String email = cadastroUsuarioDto.getEmail();
         validarCpfEmailUnico(pessoaRepository, usuarioRepository, cpf, email, pessoaExistente.getId());
-        pessoaExistente.setNome(cadastroUsuarioDto.getPessoa().getNome());
-        pessoaExistente.setTelefone(cadastroUsuarioDto.getPessoa().getTelefone());
-        pessoaExistente.setCpf(cadastroUsuarioDto.getPessoa().getCpf());
-        pessoaExistente.setSexo(cadastroUsuarioDto.getPessoa().getSexo());
-        pessoaExistente.setDataNascimento(cadastroUsuarioDto.getPessoa().getDataNascimento());
 
-        return pessoaRepository.save(pessoaExistente);
+        PessoaDto pessoaDto = cadastroUsuarioDto.getPessoa();
+        Pessoa pessoaAtualizada = PessoaDto.toEntity(pessoaDto);
+        pessoaAtualizada.setId(pessoaExistente.getId());
+
+        if (ValidatorUtil.isNotEmpty(pessoaDto.getEndereco())) {
+            Endereco enderecoAtualizado = EnderecoDto.toEntity(pessoaDto.getEndereco());
+            pessoaAtualizada.setEndereco(enderecoAtualizado);
+        }
+
+        return pessoaRepository.save(pessoaAtualizada);
     }
 
     public UsuarioDto obterUsuarioPorId(Long idUsuario) {
@@ -133,10 +133,10 @@ public class PessoaService {
     public CadastroUsuarioDto obterUsuarioPorEmail(String email) {
         Usuario usuario = usuarioRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_USUARIO_NAO_ENCONTRADO_PARA_EMAIL + email));
-        CadastroUsuarioDto usuarioObterDadosDto = modelMapper.map(usuario, CadastroUsuarioDto.class);
+        CadastroUsuarioDto usuarioObterDadosDto = CadastroUsuarioDto.fromEntity(usuario);
 
         if (ValidatorUtil.isNotEmpty(usuario.getPessoa())) {
-            modelMapper.map(usuario.getPessoa(), usuarioObterDadosDto.getPessoa());
+            CadastroUsuarioDto.fromEntity(usuario);
         }
 
         return usuarioObterDadosDto;

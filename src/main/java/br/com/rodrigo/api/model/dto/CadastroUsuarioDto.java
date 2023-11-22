@@ -2,6 +2,7 @@ package br.com.rodrigo.api.model.dto;
 
 import br.com.rodrigo.api.model.Perfil;
 import br.com.rodrigo.api.model.Usuario;
+import br.com.rodrigo.api.util.ValidatorUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 public class  CadastroUsuarioDto {
 
     private static final long serialVersionUID = 1L;
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private Long id;
 
@@ -44,9 +49,34 @@ public class  CadastroUsuarioDto {
     @NotNull(message = "Campo perfis é requerido")
     private Set<Integer> perfis = new HashSet<>();
 
-    public CadastroUsuarioDto(Usuario obj) {
-        super();
-        this.email = obj.getEmail();
-        this.senha = obj.getSenha();
+    public static CadastroUsuarioDto fromEntity(Usuario cadastroUsuario) {
+        CadastroUsuarioDto dto = new CadastroUsuarioDto();
+        dto.setId(cadastroUsuario.getId());
+        dto.setEmail(cadastroUsuario.getEmail());
+        dto.setSenha(cadastroUsuario.getSenha());
+        dto.setAtivo(cadastroUsuario.isAtivo());
+
+        if (ValidatorUtil.isNotEmpty(cadastroUsuario.getPessoa())) {
+            dto.setPessoa(PessoaDto.fromEntity(cadastroUsuario.getPessoa()));
+        }
+
+        dto.setPerfis(cadastroUsuario.getPerfis().stream().map(Perfil::getCod).collect(Collectors.toSet()));
+        return dto;
+    }
+
+    public static Usuario toEntity(CadastroUsuarioDto dto) throws ParseException {
+        Usuario cadastroUsuario = new Usuario();
+        cadastroUsuario.setId(dto.getId());
+        cadastroUsuario.setEmail(dto.getEmail());
+        cadastroUsuario.setSenha(dto.getSenha());
+        cadastroUsuario.setAtivo(dto.isAtivo());
+
+        if (ValidatorUtil.isNotEmpty(dto.getPessoa())) {
+            cadastroUsuario.setPessoa(PessoaDto.toEntity(dto.getPessoa()));
+        }
+
+        dto.getPerfis().forEach(perfilCodigo -> cadastroUsuario.getPerfis().add(Perfil.toEnum(perfilCodigo.getId())));
+
+        return cadastroUsuario;
     }
 }

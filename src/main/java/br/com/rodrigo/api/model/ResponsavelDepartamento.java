@@ -9,22 +9,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Data
-public class Funcionario {
+@Table(name = "responsavel_departamento")
+public class ResponsavelDepartamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_funcionario")
+    @Column(name = "id_responsavel_departamento")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_pessoa")
-    private Pessoa pessoa;
+    @JoinColumn(name = "id_funcionario")
+    private Funcionario funcionario;
 
-    @ManyToOne
-    @JoinColumn(name = "id_cargo")
-    private Cargo cargo;
+    @OneToOne
+    @JoinColumn(name = "id_departamento")
+    private Departamento departamento;
 
 }

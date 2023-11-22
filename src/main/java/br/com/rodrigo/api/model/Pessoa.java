@@ -1,6 +1,7 @@
 package br.com.rodrigo.api.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,8 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import java.util.Date;
 
 @Entity
 @Data
@@ -30,7 +31,8 @@ public class Pessoa {
     private String cpf;
 
     @Column(name = "data_nascimento")
-    private String dataNascimento;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date dataNascimento;
 
     @Column(name = "sexo")
     private String sexo;

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
@@ -32,5 +34,25 @@ public enum Perfil {
         }
 
         throw new IllegalArgumentException("Perfil inválido");
+    }
+    public static Perfil toEnumString(String id) {
+        if (id == null) {
+            return null;
+        }
+
+        for (Perfil x : Perfil.values()) {
+            if (id.equals(String.valueOf(x.getId()))) {
+                return x;
+            }
+        }
+
+        throw new IllegalArgumentException("Perfil inválido: " + id);
+    }
+
+    public Integer getCod() {
+        return id;
+    }
+    public static Set<Integer> getCodes(Set<Perfil> perfis) {
+        return perfis.stream().map(Perfil::getCod).collect(Collectors.toSet());
     }
 }

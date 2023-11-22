@@ -34,66 +34,39 @@ public class CargoService {
     }
 
     public CargoDto salvarCargo(CargoDto cargoDto) {
-        Cargo cargo = new Cargo();
-        cargo.setNome(cargoDto.getNome());
-        cargo.setDescricao(cargoDto.getDescricao());
-        cargo.setResponsabilidades(cargoDto.getResponsabilidades());
-        cargo.setSalarioBase(cargoDto.getSalarioBase());
+        Departamento departamento = departamentoRepository.findById(cargoDto.getDepartamento().getId())
+                .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_CARGO_NAO_ENCONTRADO + cargoDto.getDepartamento()));
 
-        Departamento departamento = departamentoRepository.findById(cargoDto.getDepartamento().getId()).
-                orElseThrow(() -> new ViolocaoIntegridadeDadosException
-                        (ERRO_CARGO_NAO_ENCONTRADO + cargoDto.getDepartamento()));
-
+        Cargo cargo = CargoDto.toEntity(cargoDto);
         cargo.setDepartamento(departamento);
 
         Cargo savedCargo = cargoRepository.save(cargo);
 
-        DepartamentoDto departamentoDto = new DepartamentoDto();
-        departamentoDto.setId(departamento.getId());
-        departamentoDto.setDescricao(departamento.getDescricao());
-        departamentoDto.setNome(departamento.getNome());
+        DepartamentoDto departamentoDto = DepartamentoDto.fromEntity(departamento);
+        CargoDto savedCargoDto = CargoDto.fromEntity(savedCargo);
+        savedCargoDto.setDepartamento(departamentoDto);
 
-        CargoDto dto = new CargoDto();
-        dto.setId(savedCargo.getId());
-        dto.setNome(savedCargo.getNome());
-        dto.setDescricao(savedCargo.getDescricao());
-        dto.setResponsabilidades(savedCargo.getResponsabilidades());
-        dto.setSalarioBase(savedCargo.getSalarioBase());
-        dto.setDepartamento(departamentoDto);
-        return dto;
+        return savedCargoDto;
     }
 
     public CargoDto atualizarCargo(Long id, CargoDto cargoDto) {
         Cargo cargoExistente = cargoRepository.findById(id)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_CARGO_NAO_ENCONTRADO));
 
-        cargoExistente.setNome(cargoDto.getNome());
-        cargoExistente.setDescricao(cargoDto.getDescricao());
-        cargoExistente.setResponsabilidades(cargoDto.getResponsabilidades());
-        cargoExistente.setSalarioBase(cargoDto.getSalarioBase());
+        Departamento departamento = departamentoRepository.findById(cargoDto.getDepartamento().getId())
+                .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_DEPARTAMENTO_NAO_ENCONTRADO + cargoDto.getDepartamento()));
 
-        Departamento departamento = departamentoRepository.findById(cargoDto.getDepartamento().getId()).
-                orElseThrow(() -> new ViolocaoIntegridadeDadosException
-                        (ERRO_DEPARTAMENTO_NAO_ENCONTRADO + cargoDto.getDepartamento()));
+        Cargo cargoAtualizado = CargoDto.toEntity(cargoDto);
+        cargoAtualizado.setId(cargoExistente.getId());
+        cargoAtualizado.setDepartamento(departamento);
 
-        cargoExistente.setDepartamento(departamento);
+        Cargo updatedCargo = cargoRepository.save(cargoAtualizado);
 
-        Cargo updatedCargo = cargoRepository.save(cargoExistente);
+        DepartamentoDto departamentoDto = DepartamentoDto.fromEntity(departamento);
+        CargoDto updatedCargoDto = CargoDto.fromEntity(updatedCargo);
+        updatedCargoDto.setDepartamento(departamentoDto);
 
-        DepartamentoDto departamentoDto = new DepartamentoDto();
-        departamentoDto.setId(departamento.getId());
-        departamentoDto.setDescricao(departamento.getDescricao());
-        departamentoDto.setNome(departamento.getNome());
-
-        CargoDto dto = new CargoDto();
-        dto.setId(updatedCargo.getId());
-        dto.setNome(updatedCargo.getNome());
-        dto.setDescricao(updatedCargo.getDescricao());
-        dto.setResponsabilidades(updatedCargo.getResponsabilidades());
-        dto.setSalarioBase(updatedCargo.getSalarioBase());
-        dto.setDepartamento(departamentoDto);
-
-        return dto;
+        return updatedCargoDto;
     }
     public void deleteCargo(Long id) {
         cargoRepository.deleteById(id);

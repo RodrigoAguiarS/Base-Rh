@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.text.ParseException;
 import java.util.List;
 
 import static br.com.rodrigo.api.util.EmailMensagensUtil.CONFIRMACAO_CADASTRO;
@@ -37,16 +38,16 @@ public class PessoaController {
     private final EmailService emailService;
 
     @PostMapping
-    public ResponseEntity<UsuarioDto> criarUsuario(@RequestBody @Valid CadastroUsuarioDto cadastroUsuarioDto) {
+    public ResponseEntity<UsuarioDto> criarUsuario(@RequestBody @Valid CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
         UsuarioDto novoUsuarioDto = pessoaService.criarUsuario(cadastroUsuarioDto);
         String mensagemEmail = getEmailCadastroTexto(cadastroUsuarioDto.getPessoa().getNome(),
                 cadastroUsuarioDto.getEmail(), cadastroUsuarioDto.getSenha());
-        emailService.sendEmail(cadastroUsuarioDto.getEmail(), CONFIRMACAO_CADASTRO, mensagemEmail);
+//        emailService.sendEmail(cadastroUsuarioDto.getEmail(), CONFIRMACAO_CADASTRO, mensagemEmail);
         return new ResponseEntity<>(novoUsuarioDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDto> atualizarUsuario(@Valid @PathVariable Long idUsuario, @RequestBody CadastroUsuarioDto cadastroUsuarioDto) {
+    public ResponseEntity<UsuarioDto> atualizarUsuario(@Valid @PathVariable Long idUsuario, @RequestBody CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
         UsuarioDto usuarioAtualizadoDto = pessoaService.atualizarUsuario(idUsuario, cadastroUsuarioDto);
         if (ValidatorUtil.isNotEmpty(usuarioAtualizadoDto)) {
             return ResponseEntity.ok(usuarioAtualizadoDto);

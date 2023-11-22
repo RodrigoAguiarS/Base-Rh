@@ -1,5 +1,6 @@
 package br.com.rodrigo.api.model.dto;
 
+import br.com.rodrigo.api.model.Endereco;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,28 @@ public class EnderecoDto {
     @NotNull(message = "Campo Número é requerido")
     @NotBlank(message = "Campo Número não pode estar em branco")
     private String numero;
+
+    public static EnderecoDto fromEntity(Endereco endereco) {
+        EnderecoDto dto = new EnderecoDto();
+        dto.setId(endereco.getId());
+        dto.setRua(endereco.getRua());
+        dto.setBairro(endereco.getBairro());
+        dto.setCidade(endereco.getCidade());
+        dto.setEstado(endereco.getEstado());
+        dto.setCep(endereco.getCep());
+        dto.setNumero(endereco.getNumero());
+        return dto;
+    }
+
+    public static Endereco toEntity(EnderecoDto dto) {
+        Endereco endereco = new Endereco();
+        endereco.setId(dto.getId());
+        endereco.setRua(dto.getRua());
+        endereco.setBairro(dto.getBairro());
+        endereco.setCidade(dto.getCidade());
+        endereco.setEstado(dto.getEstado());
+        endereco.setCep(dto.getCep());
+        endereco.setNumero(dto.getNumero());
+        return endereco;
+    }
 }

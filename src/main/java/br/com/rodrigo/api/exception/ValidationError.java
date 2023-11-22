@@ -14,6 +14,8 @@ public class ValidationError extends StandardError {
 
     public static final String ERRO_DEPARTAMENTO_NAO_ENCONTRADO = "Departamento não encontrado com o ID";
 
+    public static final String ERRO_FUNCINARIO_NAO_ENCONTRADO = "Funcionário não encontrado com o ID";
+
     public static final String ERRO_CARGO_NAO_ENCONTRADO = "Cargo não encontrado com o ID: ";
 
 
