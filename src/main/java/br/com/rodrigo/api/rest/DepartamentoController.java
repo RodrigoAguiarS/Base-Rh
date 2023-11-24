@@ -32,6 +32,12 @@ public class DepartamentoController {
         return new ResponseEntity<>(departamentos, HttpStatus.OK);
     }
 
+    @GetMapping("/semReponsavel")
+    public ResponseEntity<List<Departamento>> getAllDepartamentosSemResponsavel() {
+        List<Departamento> departamentos = departamentoService.listarDepartamentosSemResponsavel();
+        return new ResponseEntity<>(departamentos, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Departamento> getDepartamentoById(@PathVariable Long id) {
         Optional<Departamento> departamento = departamentoService.getDepartamentoById(id);
@@ -55,11 +61,5 @@ public class DepartamentoController {
     public ResponseEntity<Void> deleteDepartamento(@PathVariable Long id) {
         departamentoService.deleteDepartamento(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PostMapping("/{id}/responsaveis/{idFuncionario}")
-    public ResponseEntity<Void> vincularResponsavel(@PathVariable Long id, @PathVariable Long idFuncionario) {
-        departamentoService.vincularResponsavel(id, idFuncionario);
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

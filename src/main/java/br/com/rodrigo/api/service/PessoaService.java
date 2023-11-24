@@ -15,7 +15,6 @@ import br.com.rodrigo.api.repository.PessoaRepository;
 import br.com.rodrigo.api.repository.UsuarioRepository;
 import br.com.rodrigo.api.util.ValidatorUtil;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -115,11 +114,11 @@ public class PessoaService {
         return pessoaRepository.save(pessoaAtualizada);
     }
 
-    public UsuarioDto obterUsuarioPorId(Long idUsuario) {
+    public Usuario obterUsuarioPorId(Long idUsuario) {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_USUARIO_NAO_ENCONTRADO));
 
-        return construirUsuarioDTO(usuario);
+        return usuario;
     }
 
     public List<String> obterPerfis(String email) {
@@ -142,8 +141,10 @@ public class PessoaService {
         return usuarioObterDadosDto;
     }
 
-    public List<Usuario> listarUsuarios() {
-        return usuarioRepository.findAll();
+    public List<Usuario> listarUsuarios(String email) {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        usuarios.removeIf(usuario -> usuario.getUsername().equals(email));
+        return usuarios;
     }
 
     public Usuario buscarPorEmail(String email) {

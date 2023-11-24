@@ -57,9 +57,9 @@ public class PessoaController {
     }
 
     @GetMapping("/{idUsuario}")
-    public ResponseEntity<UsuarioDto> obterUsuarioPorId(@PathVariable Long idUsuario) {
-        UsuarioDto usuarioDto = pessoaService.obterUsuarioPorId(idUsuario);
-        return new ResponseEntity<>(usuarioDto, HttpStatus.OK);
+    public ResponseEntity<Usuario> obterUsuarioPorId(@PathVariable Long idUsuario) {
+        Usuario usuario = pessoaService.obterUsuarioPorId(idUsuario);
+        return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
     @GetMapping("/dados")
@@ -76,8 +76,9 @@ public class PessoaController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Usuario>> listarUsuarios() {
-        List<Usuario> usuarios = pessoaService.listarUsuarios();
+    public ResponseEntity<List<Usuario>> listarUsuarios(Authentication authentication) {
+        String email = authentication.getName();
+        List<Usuario> usuarios = pessoaService.listarUsuarios(email);
         return ResponseEntity.ok(usuarios);
     }
 

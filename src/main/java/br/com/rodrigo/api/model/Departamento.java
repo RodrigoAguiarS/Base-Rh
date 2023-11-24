@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -23,4 +24,7 @@ public class Departamento {
 
     @Column(name = "descricao")
     private String descricao;
+
+    @Column(name = "data_criacao")
+    private LocalDate dataCriacao = LocalDate.now();
 }
