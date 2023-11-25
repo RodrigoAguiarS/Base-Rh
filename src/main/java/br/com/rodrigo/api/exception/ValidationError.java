@@ -18,6 +18,8 @@ public class ValidationError extends StandardError {
 
     public static final String ERRO_CARGO_NAO_ENCONTRADO = "Cargo não encontrado com o ID: ";
 
+    public static final String ERRO_RESPONSAVEL_DEPARTAMENTO_NAO_ENCONTRADO = "Responsável por Departamento não encontrado: ";
+
 
     public static final String ERRO_ATUALIZAR_SENHA_USUARIO_NAO_ENCONTRADO = "Erro ao atualizar a senha. Usuário não encontrado.";
 

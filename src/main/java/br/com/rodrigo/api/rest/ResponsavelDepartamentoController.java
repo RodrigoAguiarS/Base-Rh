@@ -1,6 +1,7 @@
 package br.com.rodrigo.api.rest;
 
 import br.com.rodrigo.api.model.ResponsavelDepartamento;
+import br.com.rodrigo.api.model.dto.AtualizaCadastroResponsavelDepartamentoDto;
 import br.com.rodrigo.api.model.dto.CadastroResponsavelDepartamentoDto;
 import br.com.rodrigo.api.model.dto.ResponsavelDepartamentoDto;
 import br.com.rodrigo.api.service.ResponsavelDepartamentoService;
@@ -8,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,5 +37,21 @@ public class ResponsavelDepartamentoController {
         List<ResponsavelDepartamento> responsavelDepartamentos =
                 responsavelDepartamentoService.listarTodosResponsavelDepartamentos();
         return ResponseEntity.ok(responsavelDepartamentos);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponsavelDepartamentoDto> editarResponsavelDepartamento(@PathVariable Long id,
+                                                                                    @RequestBody AtualizaCadastroResponsavelDepartamentoDto
+                                                                                            responsavelDepartamentoDto) {
+        ResponsavelDepartamentoDto responsavelAtualizado = responsavelDepartamentoService
+                .editarResponsavelDepartamento(id, responsavelDepartamentoDto);
+        return new ResponseEntity<>(responsavelAtualizado, HttpStatus.OK);
+    }
+
+    @GetMapping("/responsaveis/{id}")
+    public ResponseEntity<ResponsavelDepartamento> buscarResponsavelDepartamentoPorId(@PathVariable Long id) {
+        ResponsavelDepartamento responsavelDepartamento = responsavelDepartamentoService
+                .buscarResponsavelDepartamentoPorId(id);
+        return new ResponseEntity<>(responsavelDepartamento, HttpStatus.OK);
     }
 }
