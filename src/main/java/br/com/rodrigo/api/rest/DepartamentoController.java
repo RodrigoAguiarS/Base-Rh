@@ -1,8 +1,12 @@
 package br.com.rodrigo.api.rest;
 
+import br.com.rodrigo.api.exception.ObjetoNaoEncontradoException;
 import br.com.rodrigo.api.model.Departamento;
+import br.com.rodrigo.api.model.ResponsavelDepartamento;
 import br.com.rodrigo.api.model.dto.DepartamentoDto;
+import br.com.rodrigo.api.model.dto.DetalhesDepartamentoDto;
 import br.com.rodrigo.api.service.DepartamentoService;
+import br.com.rodrigo.api.service.ResponsavelDepartamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +23,16 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import static br.com.rodrigo.api.exception.ValidationError.ERRO_DEPARTAMENTO_NAO_ENCONTRADO;
+
 @RestController
 @RequestMapping("/api/departamentos")
 @RequiredArgsConstructor
 public class DepartamentoController {
 
     private final DepartamentoService departamentoService;
+
+    private final ResponsavelDepartamentoService responsavelDepartamentoService;
 
     @GetMapping
     public ResponseEntity<List<Departamento>> getAllDepartamentos() {
@@ -61,5 +69,18 @@ public class DepartamentoController {
     public ResponseEntity<Void> deleteDepartamento(@PathVariable Long id) {
         departamentoService.deleteDepartamento(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/responsavelAtual/{id}")
+    public ResponseEntity<DetalhesDepartamentoDto> obterDetalhesDepartamento(@PathVariable Long id) {
+
+        Departamento departamento = departamentoService.getDepartamentoById(id)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_DEPARTAMENTO_NAO_ENCONTRADO));
+
+        ResponsavelDepartamento responsavelAtual = responsavelDepartamentoService.obterResponsavelAtual(id);
+
+        DetalhesDepartamentoDto detalhesDto = DetalhesDepartamentoDto.fromEntity(departamento, responsavelAtual);
+
+        return ResponseEntity.ok(detalhesDto);
     }
 }

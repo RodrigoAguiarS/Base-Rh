@@ -4,6 +4,8 @@ import br.com.rodrigo.api.model.Funcionario;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 public class AtualizaCadastroResponsavelDepartamentoDto {
@@ -13,5 +15,7 @@ public class AtualizaCadastroResponsavelDepartamentoDto {
     private FuncionarioDto funcionario;
 
     private DepartamentoDto departamento;
+
+    private LocalDate dataInicioResponsabilidade;
 
 }

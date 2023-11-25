@@ -13,6 +13,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -38,7 +39,7 @@ public class PessoaDto {
 
     @NotNull(message = "Campo data de nascimento é requerido")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
 
     private String sexo;
 

@@ -20,10 +20,11 @@ public class ValidationError extends StandardError {
 
     public static final String ERRO_RESPONSAVEL_DEPARTAMENTO_NAO_ENCONTRADO = "Responsável por Departamento não encontrado: ";
 
-
     public static final String ERRO_ATUALIZAR_SENHA_USUARIO_NAO_ENCONTRADO = "Erro ao atualizar a senha. Usuário não encontrado.";
 
     public static final String ERRO_DELETAR_DERPARTAMENTO_CARGO = "Este departamento possui cargos associados e não pode ser deletado.";
+
+    public static final String ERRO_DELETAR_DEPARTAMENTO_RESPONSAVEL = "Este departamento possui responsável associado e não pode ser deletado.";
     private static final long serialVersionUID = 1L;
 
     private List<FieldMessage> errors = new ArrayList<>();
