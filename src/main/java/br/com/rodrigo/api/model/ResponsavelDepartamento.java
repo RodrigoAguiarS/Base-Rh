@@ -1,5 +1,7 @@
 package br.com.rodrigo.api.model;
 
+import br.com.rodrigo.api.util.ValidatorUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -10,7 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -30,4 +34,16 @@ public class ResponsavelDepartamento {
     @JoinColumn(name = "id_departamento")
     private Departamento departamento;
 
+    @Column(name = "data_inicio_responsabilidade")
+    private LocalDate dataInicioResponsabilidade;
+
+    @Column(name = "data_fim_responsabilidade")
+    private LocalDate dataFimResponsabilidade;
+
+    @PrePersist
+    public void definirDataFimResponsabilidade() {
+        if (ValidatorUtil.isNotEmpty(dataInicioResponsabilidade)) {
+            dataFimResponsabilidade = dataInicioResponsabilidade.plusYears(1);
+        }
+    }
 }

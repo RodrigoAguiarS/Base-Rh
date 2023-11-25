@@ -42,6 +42,7 @@ public class ResponsavelDepartamentoService {
         verificarResponsavelDepartamentoExistente(departamento.getId());
 
         ResponsavelDepartamento responsavelDepartamento = new ResponsavelDepartamento();
+        responsavelDepartamento.setDataInicioResponsabilidade(responsavelDepartamentoDto.getDataInicioResponsabilidade());
         responsavelDepartamento.setFuncionario(funcionario);
         responsavelDepartamento.setDepartamento(departamento);
 
@@ -90,6 +91,7 @@ public class ResponsavelDepartamentoService {
             responsavelDepartamento.setDepartamento(departamento);
         }
 
+        responsavelDepartamento.setDataInicioResponsabilidade(responsavelDepartamentoDto.getDataInicioResponsabilidade());
         ResponsavelDepartamento savedResponsavelDepartamento = responsavelDepartamentoRepository.save(responsavelDepartamento);
         return ResponsavelDepartamentoDto.fromEntity(savedResponsavelDepartamento);
     }
@@ -102,5 +104,9 @@ public class ResponsavelDepartamentoService {
 
     public void deletaResponsabilidade(Long id) {
         responsavelDepartamentoRepository.deleteById(id);
+    }
+
+    public ResponsavelDepartamento obterResponsavelAtual(Long idDepartamento) {
+        return responsavelDepartamentoRepository.findResponsavelDepartamentoByDepartamentoId(idDepartamento);
     }
 }

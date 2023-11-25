@@ -9,4 +9,6 @@ public interface ResponsavelDepartamentoRepository extends JpaRepository<Respons
     Optional<ResponsavelDepartamento> findByFuncionarioIdAndDepartamentoId(Long idFuncionario, Long idDepartamento);
 
     boolean existsByDepartamentoId(Long idDepartamento);
+
+    ResponsavelDepartamento findResponsavelDepartamentoByDepartamentoId(Long idDepartamento);
 }
