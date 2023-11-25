@@ -78,7 +78,7 @@ public class ResponsavelDepartamentoService {
         Funcionario funcionario = funcionarioRepository.findById(responsavelDepartamentoDto.getFuncionario().getId())
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_FUNCINARIO_NAO_ENCONTRADO));
 
-        Departamento departamento = departamentoRepository.findById(responsavelDepartamentoDto.getFuncionario().getId())
+        Departamento departamento = departamentoRepository.findById(responsavelDepartamentoDto.getDepartamento().getId())
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_DEPARTAMENTO_NAO_ENCONTRADO));
 
         if (!responsavelDepartamento.getFuncionario().getId().equals(responsavelDepartamentoDto.getFuncionario().getId()) ||

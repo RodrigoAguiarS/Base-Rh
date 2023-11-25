@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_USUARIO_NAO_ENCONTRADO;
@@ -60,8 +61,9 @@ public class PessoaService {
 
     private Usuario criarNovoUsuario(CadastroUsuarioDto cadastroUsuarioDto, Pessoa pessoa, Set<Perfil> perfis) throws ParseException {
         Usuario novoUsuario = CadastroUsuarioDto.toEntity(cadastroUsuarioDto);
+        String senhaGerada = gerarSenhaAleatoria();
         novoUsuario.setPessoa(pessoa);
-        novoUsuario.setSenha(passwordEncoder.encode(cadastroUsuarioDto.getSenha()));
+        novoUsuario.setSenha(passwordEncoder.encode(senhaGerada));
         novoUsuario.setPerfis(perfis);
         novoUsuario.setAtivo(true);
         return usuarioRepository.save(novoUsuario);
@@ -87,7 +89,6 @@ public class PessoaService {
                 .collect(Collectors.toSet());
 
         usuarioExistente.setEmail(cadastroUsuarioDto.getEmail());
-        usuarioExistente.setSenha(passwordEncoder.encode(cadastroUsuarioDto.getSenha()));
         usuarioExistente.setPerfis(perfisAtualizados);
         usuarioExistente.setAtivo(true);
         usuarioExistente.setPessoa(pessoaAtualizada);
@@ -153,5 +154,13 @@ public class PessoaService {
 
     public void deletarUsuario(Long idUsuario) {
         usuarioRepository.deleteById(idUsuario);
+    }
+
+    private String gerarSenhaAleatoria() {
+        String senhaAleatoria = UUID.randomUUID().toString();
+
+        senhaAleatoria = senhaAleatoria.replaceAll
+                ("[^a-zA-Z0-9]", "").substring(0, 8);
+        return senhaAleatoria;
     }
 }

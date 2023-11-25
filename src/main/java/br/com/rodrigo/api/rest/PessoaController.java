@@ -35,14 +35,9 @@ public class PessoaController {
 
     private final PessoaService pessoaService;
 
-    private final EmailService emailService;
-
     @PostMapping
     public ResponseEntity<UsuarioDto> criarUsuario(@RequestBody @Valid CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
         UsuarioDto novoUsuarioDto = pessoaService.criarUsuario(cadastroUsuarioDto);
-        String mensagemEmail = getEmailCadastroTexto(cadastroUsuarioDto.getPessoa().getNome(),
-                cadastroUsuarioDto.getEmail(), cadastroUsuarioDto.getSenha());
-//        emailService.sendEmail(cadastroUsuarioDto.getEmail(), CONFIRMACAO_CADASTRO, mensagemEmail);
         return new ResponseEntity<>(novoUsuarioDto, HttpStatus.CREATED);
     }
 

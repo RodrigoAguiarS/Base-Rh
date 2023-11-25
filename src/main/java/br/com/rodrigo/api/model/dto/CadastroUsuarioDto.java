@@ -3,6 +3,7 @@ package br.com.rodrigo.api.model.dto;
 import br.com.rodrigo.api.model.Perfil;
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.util.ValidatorUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,10 +34,6 @@ public class  CadastroUsuarioDto {
     @NotBlank(message = "O campo 'email' não pode está vazio")
     private String email;
 
-    @NotNull(message = "Campo senha é requerido")
-    @NotBlank(message = "O campo 'senha' não pode está vazio")
-    private String senha;
-
     private boolean ativo;
 
     @Valid
@@ -53,7 +50,6 @@ public class  CadastroUsuarioDto {
         CadastroUsuarioDto dto = new CadastroUsuarioDto();
         dto.setId(cadastroUsuario.getId());
         dto.setEmail(cadastroUsuario.getEmail());
-        dto.setSenha(cadastroUsuario.getSenha());
         dto.setAtivo(cadastroUsuario.isAtivo());
 
         if (ValidatorUtil.isNotEmpty(cadastroUsuario.getPessoa())) {
@@ -68,7 +64,6 @@ public class  CadastroUsuarioDto {
         Usuario cadastroUsuario = new Usuario();
         cadastroUsuario.setId(dto.getId());
         cadastroUsuario.setEmail(dto.getEmail());
-        cadastroUsuario.setSenha(dto.getSenha());
         cadastroUsuario.setAtivo(dto.isAtivo());
 
         if (ValidatorUtil.isNotEmpty(dto.getPessoa())) {
