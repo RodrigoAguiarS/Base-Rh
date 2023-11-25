@@ -99,4 +99,8 @@ public class ResponsavelDepartamentoService {
         return responsavelDepartamentoRepository.findById(id)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_RESPONSAVEL_DEPARTAMENTO_NAO_ENCONTRADO));
     }
+
+    public void deletaResponsabilidade(Long id) {
+        responsavelDepartamentoRepository.deleteById(id);
+    }
 }
