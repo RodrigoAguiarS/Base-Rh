@@ -1,6 +1,7 @@
 package br.com.rodrigo.api.rest;
 
 import br.com.rodrigo.api.model.Cargo;
+import br.com.rodrigo.api.model.dto.CadastroCargoDto;
 import br.com.rodrigo.api.model.dto.CargoDto;
 import br.com.rodrigo.api.service.CargoService;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class CargoController {
     }
 
     @PostMapping
-    public ResponseEntity<CargoDto> saveCargo(@RequestBody CargoDto cargoDto) {
+    public ResponseEntity<CargoDto> saveCargo(@RequestBody CadastroCargoDto cargoDto) {
         CargoDto savedCargoDto = cargoService.salvarCargo(cargoDto);
         return new ResponseEntity<>(savedCargoDto, HttpStatus.CREATED);
     }

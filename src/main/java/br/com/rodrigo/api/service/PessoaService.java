@@ -116,10 +116,9 @@ public class PessoaService {
     }
 
     public Usuario obterUsuarioPorId(Long idUsuario) {
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_USUARIO_NAO_ENCONTRADO));
 
-        return usuario;
+        return usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_USUARIO_NAO_ENCONTRADO));
     }
 
     public List<String> obterPerfis(String email) {
@@ -148,9 +147,6 @@ public class PessoaService {
         return usuarios;
     }
 
-    public Usuario buscarPorEmail(String email) {
-        return usuarioRepository.findByEmail(email);
-    }
 
     public void deletarUsuario(Long idUsuario) {
         usuarioRepository.deleteById(idUsuario);

@@ -4,6 +4,7 @@ import br.com.rodrigo.api.exception.ObjetoNaoEncontradoException;
 import br.com.rodrigo.api.exception.ViolocaoIntegridadeDadosException;
 import br.com.rodrigo.api.model.Cargo;
 import br.com.rodrigo.api.model.Departamento;
+import br.com.rodrigo.api.model.dto.CadastroCargoDto;
 import br.com.rodrigo.api.model.dto.CargoDto;
 import br.com.rodrigo.api.model.dto.DepartamentoDto;
 import br.com.rodrigo.api.repository.CargoRepository;
@@ -33,11 +34,11 @@ public class CargoService {
         return cargoRepository.findById(id);
     }
 
-    public CargoDto salvarCargo(CargoDto cargoDto) {
-        Departamento departamento = departamentoRepository.findById(cargoDto.getDepartamento().getId())
+    public CargoDto salvarCargo(CadastroCargoDto cargoDto) {
+        Departamento departamento = departamentoRepository.findById(cargoDto.getDepartamento())
                 .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_CARGO_NAO_ENCONTRADO + cargoDto.getDepartamento()));
 
-        Cargo cargo = CargoDto.toEntity(cargoDto);
+        Cargo cargo = CadastroCargoDto.toEntity(cargoDto);
         cargo.setDepartamento(departamento);
 
         Cargo savedCargo = cargoRepository.save(cargo);
