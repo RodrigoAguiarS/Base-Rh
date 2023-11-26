@@ -22,9 +22,15 @@ public class ValidationError extends StandardError {
 
     public static final String ERRO_ATUALIZAR_SENHA_USUARIO_NAO_ENCONTRADO = "Erro ao atualizar a senha. Usuário não encontrado.";
 
-    public static final String ERRO_DELETAR_DERPARTAMENTO_CARGO = "Este departamento possui cargos associados e não pode ser deletado.";
+    public static final String ERRO_DELETAR_DEPARTAMENTO_CARGO = "Este departamento possui cargos associados e não pode ser deletado.";
 
     public static final String ERRO_DELETAR_DEPARTAMENTO_RESPONSAVEL = "Este departamento possui responsável associado e não pode ser deletado.";
+
+    public static final String ERRO_DELETAR_CARGO_COM_FUNCIONARIO = "Não é possível excluir o cargo porque existem funcionários associados a ele.";
+
+    public static final String ERRO_DEPARTAMENTO_COM_RESPONSAVEL = "Este departamento já possui um responsável.";
+
+    public static final String ERRO_FUNCIONARIO_RESPONSAVEL_DEPARTAMENTO = "O funcionário já é responsável por esta unidade.";
     private static final long serialVersionUID = 1L;
 
     private List<FieldMessage> errors = new ArrayList<>();

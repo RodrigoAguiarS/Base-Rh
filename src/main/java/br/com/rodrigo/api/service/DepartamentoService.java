@@ -2,23 +2,19 @@ package br.com.rodrigo.api.service;
 
 import br.com.rodrigo.api.exception.ViolocaoIntegridadeDadosException;
 import br.com.rodrigo.api.model.Departamento;
-import br.com.rodrigo.api.model.ResponsavelDepartamento;
 import br.com.rodrigo.api.model.dto.DepartamentoDto;
-import br.com.rodrigo.api.model.dto.DetalhesDepartamentoDto;
 import br.com.rodrigo.api.repository.CargoRepository;
 import br.com.rodrigo.api.repository.DepartamentoRepository;
 import br.com.rodrigo.api.repository.ResponsavelDepartamentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_DELETAR_DEPARTAMENTO_RESPONSAVEL;
-import static br.com.rodrigo.api.exception.ValidationError.ERRO_DELETAR_DERPARTAMENTO_CARGO;
+import static br.com.rodrigo.api.exception.ValidationError.ERRO_DELETAR_DEPARTAMENTO_CARGO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_DEPARTAMENTO_NAO_ENCONTRADO;
 
 @Service
@@ -67,7 +63,7 @@ public class DepartamentoService {
     public void deleteDepartamento(Long id) {
 
         if (cargoRepository.existsByDepartamentoId(id)) {
-            throw new ViolocaoIntegridadeDadosException(ERRO_DELETAR_DERPARTAMENTO_CARGO);
+            throw new ViolocaoIntegridadeDadosException(ERRO_DELETAR_DEPARTAMENTO_CARGO);
         }
         if (responsavelDepartamentoRepository.existsByDepartamentoId(id)) {
             throw new ViolocaoIntegridadeDadosException(ERRO_DELETAR_DEPARTAMENTO_RESPONSAVEL);

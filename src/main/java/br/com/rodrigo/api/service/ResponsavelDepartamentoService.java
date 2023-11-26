@@ -17,8 +17,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static br.com.rodrigo.api.exception.ValidationError.ERRO_DEPARTAMENTO_COM_RESPONSAVEL;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_DEPARTAMENTO_NAO_ENCONTRADO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_FUNCINARIO_NAO_ENCONTRADO;
+import static br.com.rodrigo.api.exception.ValidationError.ERRO_FUNCIONARIO_RESPONSAVEL_DEPARTAMENTO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_RESPONSAVEL_DEPARTAMENTO_NAO_ENCONTRADO;
 
 @Service
@@ -60,13 +62,13 @@ public class ResponsavelDepartamentoService {
         Optional<ResponsavelDepartamento> responsabilidadeExistente = responsavelDepartamentoRepository
                 .findByFuncionarioIdAndDepartamentoId(idFuncionario, idDepartamento);
         if (responsabilidadeExistente.isPresent()) {
-            throw new ViolocaoIntegridadeDadosException("O funcionário já é responsável por esta unidade.");
+            throw new ViolocaoIntegridadeDadosException(ERRO_FUNCIONARIO_RESPONSAVEL_DEPARTAMENTO);
         }
     }
 
     public void verificarResponsavelDepartamentoExistente(Long idDepartamento) {
         if (responsavelDepartamentoRepository.existsByDepartamentoId(idDepartamento)) {
-            throw new ViolocaoIntegridadeDadosException("Este departamento já possui um responsável.");
+            throw new ViolocaoIntegridadeDadosException(ERRO_DEPARTAMENTO_COM_RESPONSAVEL);
         }
     }
 

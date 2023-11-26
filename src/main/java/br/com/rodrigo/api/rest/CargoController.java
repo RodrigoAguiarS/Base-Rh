@@ -1,8 +1,13 @@
 package br.com.rodrigo.api.rest;
 
+import br.com.rodrigo.api.exception.ObjetoNaoEncontradoException;
 import br.com.rodrigo.api.model.Cargo;
+import br.com.rodrigo.api.model.ResponsavelDepartamento;
+import br.com.rodrigo.api.model.dto.CadastroCargoDto;
 import br.com.rodrigo.api.model.dto.CargoDto;
+import br.com.rodrigo.api.model.dto.DetalhesCargoDto;
 import br.com.rodrigo.api.service.CargoService;
+import br.com.rodrigo.api.service.ResponsavelDepartamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +23,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+import static br.com.rodrigo.api.exception.ValidationError.ERRO_DEPARTAMENTO_NAO_ENCONTRADO;
+
 @RestController
 @RequestMapping("/api/cargos")
 @RequiredArgsConstructor
 public class CargoController {
 
     private final CargoService cargoService;
+
+    private final ResponsavelDepartamentoService responsavelDepartamentoService;
 
     @GetMapping
     public ResponseEntity<List<Cargo>> getAllCargos() {
@@ -39,8 +48,8 @@ public class CargoController {
     }
 
     @PostMapping
-    public ResponseEntity<CargoDto> saveCargo(@RequestBody CargoDto cargoDto) {
-        CargoDto savedCargoDto = cargoService.salvarCargo(cargoDto);
+    public ResponseEntity<CargoDto> saveCargo(@RequestBody CadastroCargoDto cadastroCargoDto) {
+        CargoDto savedCargoDto = cargoService.salvarCargo(cadastroCargoDto);
         return new ResponseEntity<>(savedCargoDto, HttpStatus.CREATED);
     }
 
@@ -54,5 +63,18 @@ public class CargoController {
     public ResponseEntity<Void> deleteCargo(@PathVariable Long id) {
         cargoService.deleteCargo(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public ResponseEntity<DetalhesCargoDto> obterDetalhesDepartamento(@PathVariable Long id) {
+
+        Cargo cargo = cargoService.getCargoById(id)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_DEPARTAMENTO_NAO_ENCONTRADO));
+
+        ResponsavelDepartamento responsavelAtual = responsavelDepartamentoService.obterResponsavelAtual(cargo.getDepartamento().getId());
+
+        DetalhesCargoDto detalhesDto = DetalhesCargoDto.fromEntity(cargo, responsavelAtual);
+
+        return ResponseEntity.ok(detalhesDto);
     }
 }
