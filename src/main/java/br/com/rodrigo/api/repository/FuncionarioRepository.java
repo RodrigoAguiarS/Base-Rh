@@ -6,4 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> {
 
     boolean existsByCargoId(Long idCargo);
+
+    boolean existsByPessoaId(Long idPessoa);
+
+    boolean existsByPessoaIdAndIdNot(Long id, Long funcionarioId);
+
+    Funcionario findByPessoaId(Long pessoaId);
 }

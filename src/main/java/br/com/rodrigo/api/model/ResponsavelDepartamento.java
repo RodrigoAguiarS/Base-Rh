@@ -1,7 +1,6 @@
 package br.com.rodrigo.api.model;
 
 import br.com.rodrigo.api.util.ValidatorUtil;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Column;

@@ -40,41 +40,25 @@ public class ValidatorUtil {
         return !isEmpty(o1) && !isEmpty(o2) && !o1.equals(o2);
     }
 
-    public static void validarCpfEmailUnico(
-            PessoaRepository pessoaRepository,
-            UsuarioRepository usuarioRepository,
-            String cpf,
-            String email,
-            Long id
-    ) {
-        if (isNotEmpty(id)) {
-            validarCpfExistenteComId(pessoaRepository, cpf, id);
-            validarEmailExistenteComId(usuarioRepository, email, id);
-        } else {
-            validarCpfExistente(pessoaRepository, cpf);
-            validarEmailExistente(usuarioRepository, email);
-        }
-    }
-
-    private static void validarCpfExistenteComId(PessoaRepository pessoaRepository, String cpf, Long id) {
+    public static void validarCpfExistenteComId(PessoaRepository pessoaRepository, String cpf, Long id) {
         if (pessoaRepository.existsByCpfAndIdNot(cpf, id)) {
             throw new ViolocaoIntegridadeDadosException(ERRO_CPF_DUPLICADO);
         }
     }
 
-    private static void validarEmailExistenteComId(UsuarioRepository usuarioRepository, String email, Long id) {
+    public static void validarEmailExistenteComId(UsuarioRepository usuarioRepository, String email, Long id) {
         if (usuarioRepository.existsByEmailAndIdNot(email, id)) {
             throw new ViolocaoIntegridadeDadosException(ERRO_EMAIL_DUPLICADO);
         }
     }
 
-    private static void validarCpfExistente(PessoaRepository pessoaRepository, String cpf) {
+    public static void validarCpfExistente(PessoaRepository pessoaRepository, String cpf) {
         if (pessoaRepository.existsByCpf(cpf)) {
             throw new ViolocaoIntegridadeDadosException(ERRO_CPF_DUPLICADO);
         }
     }
 
-    private static void validarEmailExistente(UsuarioRepository usuarioRepository, String email) {
+    public static void validarEmailExistente(UsuarioRepository usuarioRepository, String email) {
         if (usuarioRepository.existsByEmail(email)) {
             throw new ViolocaoIntegridadeDadosException(ERRO_EMAIL_DUPLICADO);
         }

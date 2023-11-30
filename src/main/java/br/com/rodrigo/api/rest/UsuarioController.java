@@ -2,9 +2,9 @@ package br.com.rodrigo.api.rest;
 
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
+import br.com.rodrigo.api.model.dto.UsuarioFuncionarioDto;
 import br.com.rodrigo.api.model.dto.UsuarioDto;
-import br.com.rodrigo.api.service.EmailService;
-import br.com.rodrigo.api.service.PessoaService;
+import br.com.rodrigo.api.service.UsuarioService;
 import br.com.rodrigo.api.util.ValidatorUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,26 +24,23 @@ import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.List;
 
-import static br.com.rodrigo.api.util.EmailMensagensUtil.CONFIRMACAO_CADASTRO;
-import static br.com.rodrigo.api.util.EmailMensagensUtil.getEmailCadastroTexto;
-
 
 @RestController
-@RequestMapping("/api/pessoas")
+@RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
-public class PessoaController {
+public class UsuarioController {
 
-    private final PessoaService pessoaService;
+    private final UsuarioService usuarioService;
 
     @PostMapping
     public ResponseEntity<UsuarioDto> criarUsuario(@RequestBody @Valid CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
-        UsuarioDto novoUsuarioDto = pessoaService.criarUsuario(cadastroUsuarioDto);
+        UsuarioDto novoUsuarioDto = usuarioService.criarUsuario(cadastroUsuarioDto);
         return new ResponseEntity<>(novoUsuarioDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{idUsuario}")
     public ResponseEntity<UsuarioDto> atualizarUsuario(@Valid @PathVariable Long idUsuario, @RequestBody CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
-        UsuarioDto usuarioAtualizadoDto = pessoaService.atualizarUsuario(idUsuario, cadastroUsuarioDto);
+        UsuarioDto usuarioAtualizadoDto = usuarioService.atualizarUsuario(idUsuario, cadastroUsuarioDto);
         if (ValidatorUtil.isNotEmpty(usuarioAtualizadoDto)) {
             return ResponseEntity.ok(usuarioAtualizadoDto);
         } else {
@@ -53,34 +50,40 @@ public class PessoaController {
 
     @GetMapping("/{idUsuario}")
     public ResponseEntity<Usuario> obterUsuarioPorId(@PathVariable Long idUsuario) {
-        Usuario usuario = pessoaService.obterUsuarioPorId(idUsuario);
+        Usuario usuario = usuarioService.obterUsuarioPorId(idUsuario);
         return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
     @GetMapping("/dados")
     public CadastroUsuarioDto obterUsuarioPorEmail(Authentication authentication) {
         String email = authentication.getName();
-        return pessoaService.obterUsuarioPorEmail(email);
+        return usuarioService.obterUsuarioPorEmail(email);
     }
 
     @GetMapping("/papel")
     public ResponseEntity<List<String>> getRoles(Authentication authentication) {
         String email = authentication.getName();
-        List<String> roles = pessoaService.obterPerfis(email);
+        List<String> roles = usuarioService.obterPerfis(email);
         return ResponseEntity.ok(roles);
     }
 
     @GetMapping()
     public ResponseEntity<List<Usuario>> listarUsuarios(Authentication authentication) {
         String email = authentication.getName();
-        List<Usuario> usuarios = pessoaService.listarUsuarios(email);
+        List<Usuario> usuarios = usuarioService.listarUsuarios(email);
         return ResponseEntity.ok(usuarios);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN_GERAL')")
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long idUsuario) {
-        pessoaService.deletarUsuario(idUsuario);
+        usuarioService.deletarUsuario(idUsuario);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{usuarioId}/dados")
+    public ResponseEntity<UsuarioFuncionarioDto> obterPessoaEFuncionarioCompleto(@PathVariable Long usuarioId) {
+        UsuarioFuncionarioDto usuarioFuncionarioDto = usuarioService.obterUsuarioEhFuncionario(usuarioId);
+        return ResponseEntity.ok(usuarioFuncionarioDto);
     }
 }

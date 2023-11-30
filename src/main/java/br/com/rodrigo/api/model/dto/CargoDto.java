@@ -22,16 +22,17 @@ public class CargoDto {
     @NotBlank(message = "Campo nome não pode estar em branco")
     private String nome;
 
+    @NotNull(message = "Campo descricao é requerido")
+    @NotBlank(message = "Campo descricao não pode estar em branco")
     private String descricao;
 
+    @NotNull(message = "Campo responsabilidades é requerido")
+    @NotBlank(message = "Campo responsabilidades não pode estar em branco")
     private String responsabilidades;
 
     @NotNull(message = "Campo salarioBase é requerido")
-    @NotBlank(message = "Campo salarioBase não pode estar em branco")
     private BigDecimal salarioBase;
 
-    @NotNull(message = "Campo departamento é requerido")
-    @NotBlank(message = "Campo departamento não pode estar em branco")
     @Valid
     private DepartamentoDto departamento;
 

@@ -5,6 +5,8 @@ import br.com.rodrigo.api.service.FuncionarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +20,14 @@ public class FuncionarioController {
     private final FuncionarioService funcionarioService;
 
     @GetMapping()
-    public ResponseEntity<List<Funcionario>> listarUsuarios() {
+    public ResponseEntity<List<Funcionario>> listarFuncionarios() {
         List<Funcionario> funcionarios = funcionarioService.listarTodosFuncionarios();
         return ResponseEntity.ok(funcionarios);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirFuncionario(@PathVariable Long id) {
+        funcionarioService.excluirFuncionario(id);
+        return ResponseEntity.noContent().build();
     }
 }

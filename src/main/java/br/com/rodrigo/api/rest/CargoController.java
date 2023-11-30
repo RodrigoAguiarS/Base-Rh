@@ -3,7 +3,6 @@ package br.com.rodrigo.api.rest;
 import br.com.rodrigo.api.exception.ObjetoNaoEncontradoException;
 import br.com.rodrigo.api.model.Cargo;
 import br.com.rodrigo.api.model.ResponsavelDepartamento;
-import br.com.rodrigo.api.model.dto.CadastroCargoDto;
 import br.com.rodrigo.api.model.dto.CargoDto;
 import br.com.rodrigo.api.model.dto.DetalhesCargoDto;
 import br.com.rodrigo.api.service.CargoService;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,13 +48,13 @@ public class CargoController {
     }
 
     @PostMapping
-    public ResponseEntity<CargoDto> saveCargo(@RequestBody CadastroCargoDto cadastroCargoDto) {
-        CargoDto savedCargoDto = cargoService.salvarCargo(cadastroCargoDto);
+    public ResponseEntity<CargoDto> saveCargo(@Valid @RequestBody CargoDto cargoDto) {
+        CargoDto savedCargoDto = cargoService.salvarCargo(cargoDto);
         return new ResponseEntity<>(savedCargoDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CargoDto> updateCargo(@PathVariable Long id, @RequestBody CargoDto cargoDto) {
+    public ResponseEntity<CargoDto> updateCargo(@Valid @PathVariable Long id, @RequestBody CargoDto cargoDto) {
         CargoDto updatedCargoDto = cargoService.atualizarCargo(id, cargoDto);
         return new ResponseEntity<>(updatedCargoDto, HttpStatus.OK);
     }

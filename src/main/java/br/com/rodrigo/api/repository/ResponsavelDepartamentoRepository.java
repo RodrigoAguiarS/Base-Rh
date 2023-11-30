@@ -1,5 +1,6 @@
 package br.com.rodrigo.api.repository;
 
+import br.com.rodrigo.api.model.Funcionario;
 import br.com.rodrigo.api.model.ResponsavelDepartamento;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,4 +12,6 @@ public interface ResponsavelDepartamentoRepository extends JpaRepository<Respons
     boolean existsByDepartamentoId(Long idDepartamento);
 
     ResponsavelDepartamento findResponsavelDepartamentoByDepartamentoId(Long idDepartamento);
+
+    boolean existsByFuncionario(Funcionario funcionario);
 }

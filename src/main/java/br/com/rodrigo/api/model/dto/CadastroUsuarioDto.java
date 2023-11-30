@@ -1,9 +1,9 @@
 package br.com.rodrigo.api.model.dto;
 
+import br.com.rodrigo.api.model.Cargo;
 import br.com.rodrigo.api.model.Perfil;
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.util.ValidatorUtil;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class  CadastroUsuarioDto {
+public class  CadastroUsuarioDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,6 +40,10 @@ public class  CadastroUsuarioDto {
 
     @Valid
     private PessoaDto pessoa;
+
+    private CargoDto cargo;
+
+    private LocalDate dataEntrada;
 
     public Set<Perfil> getPerfis() {
         return perfis.stream().map(Perfil::toEnum).collect(Collectors.toSet());
