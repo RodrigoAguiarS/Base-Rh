@@ -29,7 +29,7 @@ public class Cargo {
     @Column(name = "responsabilidades")
     private String responsabilidades;
 
-    @Column(name = "salarioBase")
+    @Column(name = "salario_base")
     private BigDecimal salarioBase;
 
     @ManyToOne(fetch = FetchType.EAGER)

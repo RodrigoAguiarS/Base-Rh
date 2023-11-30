@@ -1,11 +1,14 @@
 package br.com.rodrigo.api.model.dto;
 
+import br.com.rodrigo.api.model.Funcionario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.text.ParseException;
+import java.time.LocalDate;
 
 
 @Data
@@ -22,4 +25,31 @@ public class FuncionarioDto {
     @NotNull(message = "Campo cargo é requerido")
     @NotBlank(message = "Campo cargo não pode estar em branco")
     private CargoDto cargo;
+
+    private LocalDate dataEntrada;
+
+    private LocalDate dataSaida;
+
+    public static FuncionarioDto fromEntity(Funcionario funcionario) {
+
+        FuncionarioDto dto = new FuncionarioDto();
+        dto.setId(funcionario.getId());
+        dto.setPessoa(PessoaDto.fromEntity(funcionario.getPessoa()));
+        dto.setCargo(CargoDto.fromEntity(funcionario.getCargo()));
+        dto.setDataEntrada(funcionario.getDataEntrada());
+        dto.setDataSaida(funcionario.getDataSaida());
+
+        return dto;
+    }
+
+    public static Funcionario toEntity(FuncionarioDto dto) throws ParseException {
+        Funcionario funcionario = new Funcionario();
+        funcionario.setId(dto.getId());
+        funcionario.setPessoa(PessoaDto.toEntity(dto.getPessoa()));
+        funcionario.setCargo(CargoDto.toEntity(dto.getCargo()));
+        funcionario.setDataEntrada(dto.getDataEntrada());
+        funcionario.setDataSaida(dto.getDataSaida());
+
+        return funcionario;
+    }
 }

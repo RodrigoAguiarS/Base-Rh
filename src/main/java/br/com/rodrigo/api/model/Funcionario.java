@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -26,5 +27,11 @@ public class Funcionario {
     @ManyToOne
     @JoinColumn(name = "id_cargo")
     private Cargo cargo;
+
+    @Column(name = "data_entrada")
+    private LocalDate dataEntrada;
+
+    @Column(name = "data_saida")
+    private LocalDate dataSaida;
 
 }
