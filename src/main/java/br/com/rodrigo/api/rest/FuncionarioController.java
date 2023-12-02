@@ -1,6 +1,7 @@
 package br.com.rodrigo.api.rest;
 
 import br.com.rodrigo.api.model.Funcionario;
+import br.com.rodrigo.api.model.dto.DetalhesFuncionarioDto;
 import br.com.rodrigo.api.service.FuncionarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,5 +30,10 @@ public class FuncionarioController {
     public ResponseEntity<Void> excluirFuncionario(@PathVariable Long id) {
         funcionarioService.excluirFuncionario(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/detalhes")
+    public List<DetalhesFuncionarioDto> listarTodosDetalhesFuncionarios() {
+        return funcionarioService.listarTodosDetalhesFuncionarios();
     }
 }
