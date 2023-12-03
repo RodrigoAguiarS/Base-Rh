@@ -2,6 +2,7 @@ package br.com.rodrigo.api.rest;
 
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
+import br.com.rodrigo.api.model.dto.SenhaRecuperacaoDto;
 import br.com.rodrigo.api.model.dto.UsuarioFuncionarioDto;
 import br.com.rodrigo.api.model.dto.UsuarioDto;
 import br.com.rodrigo.api.service.UsuarioService;
@@ -85,5 +86,12 @@ public class UsuarioController {
     public ResponseEntity<UsuarioFuncionarioDto> obterPessoaEFuncionarioCompleto(@PathVariable Long usuarioId) {
         UsuarioFuncionarioDto usuarioFuncionarioDto = usuarioService.obterUsuarioEhFuncionario(usuarioId);
         return ResponseEntity.ok(usuarioFuncionarioDto);
+    }
+
+    @PutMapping("/alterar-senha/{id}")
+    public ResponseEntity<?> alterarSenha(@PathVariable Long id,
+                                               @RequestBody SenhaRecuperacaoDto senhaRecuperacaoDto) {
+        usuarioService.alterarSenha(id, senhaRecuperacaoDto.getSenha());
+        return ResponseEntity.ok().build();
     }
 }

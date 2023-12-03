@@ -247,4 +247,13 @@ public class UsuarioService {
         return usuarioRepository.findByEmailIgnoreCase(username)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_USUARIO_NAO_ENCONTRADO));
     }
+
+    public void alterarSenha(Long idUsuario, String novaSenha) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_USUARIO_NAO_ENCONTRADO));
+
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
+
+        usuarioRepository.save(usuario);
+    }
 }
