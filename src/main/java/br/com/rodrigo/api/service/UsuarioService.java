@@ -242,4 +242,9 @@ public class UsuarioService {
 
         return UsuarioFuncionarioDto.fromEntity(pessoa, funcionario, usuario);
     }
+
+    public Usuario buscarPorNomeUsuario(String username) {
+        return usuarioRepository.findByEmailIgnoreCase(username)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_USUARIO_NAO_ENCONTRADO));
+    }
 }

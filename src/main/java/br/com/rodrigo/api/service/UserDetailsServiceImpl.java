@@ -19,7 +19,7 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UsuarioRepository repository;
-    private Authentication originalAuthentication;
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Usuario> user = repository.findByEmailIgnoreCase(email);
@@ -27,29 +27,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new Usuario(user.get().getId(), user.get().getEmail(), user.get().getSenha(), user.get().getPerfis());
         }
         throw new UsernameNotFoundException(email);
-    }
-
-    public void executarAcaoComoUsuario(String targetUsername) {
-        UserDetails targetUser = loadUserByUsername(targetUsername);
-        originalAuthentication = SecurityContextHolder.getContext().getAuthentication();
-
-        try {
-            UsernamePasswordAuthenticationToken impersonationToken =
-                    new UsernamePasswordAuthenticationToken(targetUser, null, targetUser.getAuthorities());
-
-            impersonationToken.setDetails(originalAuthentication.getDetails());
-
-            SecurityContextHolder.getContext().setAuthentication(impersonationToken);
-
-        } finally {
-            SecurityContextHolder.getContext().setAuthentication(originalAuthentication);
-        }
-    }
-
-    public void reverterParaUsuarioOriginal() {
-        if (ValidatorUtil.isNotEmpty(originalAuthentication)) {
-            SecurityContextHolder.getContext().setAuthentication(originalAuthentication);
-            originalAuthentication = null;
-        }
     }
 }
