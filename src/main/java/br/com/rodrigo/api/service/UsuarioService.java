@@ -9,6 +9,7 @@ import br.com.rodrigo.api.model.Perfil;
 import br.com.rodrigo.api.model.Pessoa;
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
+import br.com.rodrigo.api.model.dto.DadosUsuariosDto;
 import br.com.rodrigo.api.model.dto.EnderecoDto;
 import br.com.rodrigo.api.model.dto.PessoaDto;
 import br.com.rodrigo.api.model.dto.UsuarioFuncionarioDto;
@@ -173,16 +174,18 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    public CadastroUsuarioDto obterUsuarioPorEmail(String email) {
+    public DadosUsuariosDto obterUsuarioPorEmail(String email) {
         Usuario usuario = usuarioRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_USUARIO_NAO_ENCONTRADO_PARA_EMAIL + email));
-        CadastroUsuarioDto usuarioObterDadosDto = CadastroUsuarioDto.fromEntity(usuario);
+
+        Funcionario funcionario = funcionarioRepository.findByPessoaId(usuario.getPessoa().getId());
+
+        DadosUsuariosDto dadosUsuariosDto = DadosUsuariosDto.fromEntity(usuario, funcionario);
 
         if (ValidatorUtil.isNotEmpty(usuario.getPessoa())) {
             CadastroUsuarioDto.fromEntity(usuario);
         }
-
-        return usuarioObterDadosDto;
+        return dadosUsuariosDto;
     }
 
     public List<Usuario> listarUsuarios(String email) {
