@@ -2,6 +2,7 @@ package br.com.rodrigo.api.rest;
 
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
+import br.com.rodrigo.api.model.dto.DadosUsuariosDto;
 import br.com.rodrigo.api.model.dto.SenhaRecuperacaoDto;
 import br.com.rodrigo.api.model.dto.UsuarioFuncionarioDto;
 import br.com.rodrigo.api.model.dto.UsuarioDto;
@@ -56,7 +57,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/dados")
-    public CadastroUsuarioDto obterUsuarioPorEmail(Authentication authentication) {
+    public DadosUsuariosDto obterUsuarioPorEmail(Authentication authentication) {
         String email = authentication.getName();
         return usuarioService.obterUsuarioPorEmail(email);
     }
