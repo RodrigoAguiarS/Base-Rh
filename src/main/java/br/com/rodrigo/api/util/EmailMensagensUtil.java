@@ -7,7 +7,7 @@ public class EmailMensagensUtil {
 
     public static String CONFIRMACAO_CADASTRO = "Confirmação de cadastro";
     public static String REDIFINICAO_SENHA = "Redefinição de Senha";
-    public static String URL_REDIFINICAO_SENHA = "http://localhost:4200/login-alterar/";
+    public static String URL_REDIFINICAO_SENHA = "https://sistema-rh-bay.vercel.app/login-alterar/";
 
     public static String getEmailCadastroTexto(String nome, String email, String senha) {
         return String.format("Olá %s, obrigado por se cadastrar! Seu e-mail: %s, Sua senha: %s", nome, email, senha);
