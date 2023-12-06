@@ -10,11 +10,15 @@ public class ValidationError extends StandardError {
     public static final String ERRO_USUARIO_NAO_ENCONTRADO_PARA_EMAIL = "Usuário não encontrado para o e-mail: ";
     public static final String ERRO_USUARIO_NAO_ENCONTRADO = "Usuário não encontrado";
 
+    public static final String ERRO_REGISTRO_NAO_ENCONTRADO = "Registro não encontrado";
+
     public static final String ERRO_DELETAR_USUARIO_FUNCIONARIO_EH_RESPONSAVEL_DEPARTAMENTO = "Não é possível excluir o usuário. O funcionário é responsável por um departamento.";
     public static final String ERRO_UID_EXPERIADO = "UID inválido ou expirado.";
     public static final String ERRO_ENVIAR_EMAIL = "Erro ao enviar o email para";
 
     public static final String ERRO_PESSOA_NAO_ENCONTRADA = "Pessoa não encontrada com o ID";
+
+    public static final String ERRO_REGISTRO_NAO_ENCONTRADO_FUNCIONARIO = "Registro de entrada não encontrado para o funcionário na data atual.";
 
     public static final String ERRO_PESSOA_EH_FUNCIONARIO = "Esta pessoa já está vinculada a outro funcionário.";
 
