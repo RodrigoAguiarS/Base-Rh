@@ -21,6 +21,8 @@ import br.com.rodrigo.api.repository.PessoaRepository;
 import br.com.rodrigo.api.repository.UsuarioRepository;
 import br.com.rodrigo.api.util.ValidatorUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,8 @@ import static br.com.rodrigo.api.exception.ValidationError.ERRO_FUNCINARIO_NAO_E
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_USUARIO_NAO_ASSOCIADA_AO_PESSOA;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_USUARIO_NAO_ENCONTRADO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_USUARIO_NAO_ENCONTRADO_PARA_EMAIL;
+import static br.com.rodrigo.api.util.EmailMensagensUtil.CONFIRMACAO_CADASTRO;
+import static br.com.rodrigo.api.util.EmailMensagensUtil.getEmailCadastroTexto;
 import static br.com.rodrigo.api.util.ValidatorUtil.validarCpfExistente;
 import static br.com.rodrigo.api.util.ValidatorUtil.validarCpfExistenteComId;
 import static br.com.rodrigo.api.util.ValidatorUtil.validarEmailExistente;
@@ -59,6 +63,8 @@ public class UsuarioService {
     private final FuncionarioRepository funcionarioRepository;
 
     private final FuncionarioService funcionarioService;
+
+    private final EmailService emailService;
 
 
     public UsuarioDto criarUsuario(CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
@@ -109,6 +115,9 @@ public class UsuarioService {
         String senhaGerada = gerarSenhaAleatoria();
         String email = cadastroUsuarioDto.getEmail();
         validarEmailExistente(usuarioRepository, email);
+        String mensagemEmail = getEmailCadastroTexto(cadastroUsuarioDto.getPessoa().getNome(),
+                cadastroUsuarioDto.getEmail(), senhaGerada);
+        emailService.sendEmail(cadastroUsuarioDto.getEmail(), CONFIRMACAO_CADASTRO, mensagemEmail);
         novoUsuario.setPessoa(pessoa);
         novoUsuario.setSenha(passwordEncoder.encode(senhaGerada));
         novoUsuario.setPerfis(perfis);
@@ -194,10 +203,6 @@ public class UsuarioService {
         return usuarios;
     }
 
-    public Usuario buscarPorEmail(String email) {
-        return usuarioRepository.findByEmail(email);
-    }
-
     @Transactional
     public void deletarUsuario(Long idUsuario) {
         Usuario usuario = usuarioRepository.findById(idUsuario)
@@ -259,4 +264,18 @@ public class UsuarioService {
 
         usuarioRepository.save(usuario);
     }
+
+    public Usuario obterUsuarioLogado() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return buscarPorNomeUsuario(authentication.getName());
+    }
+
+    public Funcionario getFuncionarioDoUsuarioLogado() {
+        Usuario usuario = obterUsuarioLogado();
+
+        return funcionarioRepository.findByPessoaId(usuario.getPessoa().getId());
+    }
+
 }

@@ -1,6 +1,8 @@
 package br.com.rodrigo.api.rest;
 
+import br.com.rodrigo.api.model.Funcionario;
 import br.com.rodrigo.api.model.Usuario;
+import br.com.rodrigo.api.model.dto.DadosUsuariosDto;
 import br.com.rodrigo.api.model.dto.RefreshTokenRequestDto;
 import br.com.rodrigo.api.model.dto.RefreshTokenResponseDto;
 import br.com.rodrigo.api.security.JWTUtil;
@@ -65,13 +67,17 @@ public class ImpersonationController {
      * @return Resposta com as informações do usuário.
      */
     @GetMapping("/info")
-    public ResponseEntity<Usuario> getUserInfo(@RequestParam("token") String token) {
+    public ResponseEntity<DadosUsuariosDto> getUserInfo(@RequestParam("token") String token) {
         String username = jwtUtil.getUsername(token);
 
         Usuario usuario = usuarioService.buscarPorNomeUsuario(username);
 
+        Funcionario funcionario = usuarioService.getFuncionarioDoUsuarioLogado();
+
+        DadosUsuariosDto dadosUsuariosDto = DadosUsuariosDto.fromEntity(usuario, funcionario);
+
         if (ValidatorUtil.isNotEmpty(usuario)) {
-            return ResponseEntity.ok(usuario);
+            return ResponseEntity.ok(dadosUsuariosDto);
         } else {
             return ResponseEntity.notFound().build();
         }
