@@ -1,8 +1,11 @@
 package br.com.rodrigo.api.exception;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class ValidationError extends StandardError {
 
     public static final String ERRO_CPF_DUPLICADO = "CPF já cadastrado. Por favor, insira um CPF único.";
@@ -11,6 +14,8 @@ public class ValidationError extends StandardError {
     public static final String ERRO_USUARIO_NAO_ENCONTRADO = "Usuário não encontrado";
 
     public static final String ERRO_REGISTRO_NAO_ENCONTRADO = "Registro não encontrado";
+
+    public static final String ERRO_REGISTRO_PONTO_PESSOA = "Já existe um registro de ponto para essa pessoa nessa data.";
 
     public static final String ERRO_DELETAR_USUARIO_FUNCIONARIO_EH_RESPONSAVEL_DEPARTAMENTO = "Não é possível excluir o usuário. O funcionário é responsável por um departamento.";
     public static final String ERRO_UID_EXPERIADO = "UID inválido ou expirado.";
@@ -45,7 +50,7 @@ public class ValidationError extends StandardError {
     public static final String ERRO_FUNCIONARIO_RESPONSAVEL_DEPARTAMENTO = "O funcionário já é responsável por esta unidade.";
     private static final long serialVersionUID = 1L;
 
-    private List<FieldMessage> errors = new ArrayList<>();
+    private final List<FieldMessage> errors = new ArrayList<>();
 
     public ValidationError(long timestamp, Integer status, String error, String message, String path) {
         super(timestamp, status, error, message, path);
@@ -55,7 +60,4 @@ public class ValidationError extends StandardError {
         this.errors.add(new FieldMessage(fieldName, message));
     }
 
-    public List<FieldMessage> getErrors() {
-        return errors;
-    }
 }

@@ -1,6 +1,5 @@
 package br.com.rodrigo.api.model.dto;
 import br.com.rodrigo.api.model.RegistroPonto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,10 +10,9 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class RegistroPontoDto {
 
-    private Integer id;
-    private LocalDate dataRegistro = LocalDate.now();
-
-    private LocalTime horaEntrada = LocalTime.now();
+    private Long id;
+    private LocalDate dataRegistro;
+    private LocalTime horaEntrada;
     private LocalTime horaSaida;
     private boolean pontoRegistrado = false;
     private String observacoes;
