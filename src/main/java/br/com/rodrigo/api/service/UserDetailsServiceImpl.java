@@ -2,11 +2,7 @@ package br.com.rodrigo.api.service;
 
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.repository.UsuarioRepository;
-import br.com.rodrigo.api.util.ValidatorUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
