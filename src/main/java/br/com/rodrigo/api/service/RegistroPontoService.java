@@ -50,7 +50,7 @@ public class RegistroPontoService {
             RegistroPonto relogioPontoExistente = optionalRelogioPonto.get();
             if (ValidatorUtil.isEmpty(relogioPontoExistente.getHoraSaida())) {
                 relogioPontoExistente.setObservacoes(registroPontoDto.getObservacoes());
-                return registrarSaida(relogioPontoExistente, LocalTime.now(),
+                return registrarSaida(relogioPontoExistente, LocalTime.now(fusoHorario),
                         true);
             } else {
                 throw new ViolocaoIntegridadeDadosException("Já existe um registro de ponto para essa pessoa nessa data.");
