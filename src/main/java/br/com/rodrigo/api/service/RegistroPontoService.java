@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +38,11 @@ public class RegistroPontoService {
     }
 
     public RegistroPonto criarRegistroPontoAPartirDeDTO(CadastroRegistroPontoDto registroPontoDto, Funcionario funcionario) {
-        LocalDate dataAtual = LocalDate.now();
-        LocalTime horaAtual = LocalTime.now();
+        ZoneId fusoHorario = ZoneId.of("America/Sao_Paulo");
+
+        LocalDate dataAtual = LocalDate.now(fusoHorario);
+        LocalTime horaAtual = LocalTime.now(fusoHorario);
+
         Optional<RegistroPonto> optionalRelogioPonto = registroPontoRepository
                 .findByFuncionarioAndDataRegistroAndPontoRegistrado(funcionario, dataAtual, false);
 
