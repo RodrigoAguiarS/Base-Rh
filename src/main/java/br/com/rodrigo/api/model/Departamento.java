@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
@@ -26,5 +28,9 @@ public class Departamento {
     private String descricao;
 
     @Column(name = "data_criacao")
-    private LocalDate dataCriacao = LocalDate.now();
+    private LocalDate dataCriacao;
+
+    @ManyToOne
+    @JoinColumn(name = "id_empresa")
+    private Empresa empresa;
 }

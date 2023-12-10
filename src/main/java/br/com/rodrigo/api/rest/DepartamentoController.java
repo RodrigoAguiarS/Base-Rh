@@ -55,7 +55,7 @@ public class DepartamentoController {
 
     @PostMapping
     public ResponseEntity<Departamento> saveDepartamento(@Valid @RequestBody DepartamentoDto departamentoDto) {
-        Departamento savedDepartamento = departamentoService.saveDepartamento(departamentoDto);
+        Departamento savedDepartamento = departamentoService.cadastroDepartamento(departamentoDto);
         return new ResponseEntity<>(savedDepartamento, HttpStatus.CREATED);
     }
 

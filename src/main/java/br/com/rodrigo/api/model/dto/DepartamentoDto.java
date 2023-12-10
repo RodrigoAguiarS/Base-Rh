@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,11 +24,17 @@ public class DepartamentoDto {
     @NotBlank(message = "Campo descricao não pode estar em branco")
     private String descricao;
 
+    private LocalDate dataCriacao = LocalDate.now();
+
+    private EmpresaDto empresa;
+
     public static DepartamentoDto fromEntity(Departamento departamento) {
         DepartamentoDto departamentoDto = new DepartamentoDto();
         departamentoDto.setId(departamento.getId());
         departamentoDto.setNome(departamento.getNome());
         departamentoDto.setDescricao(departamento.getDescricao());
+        departamentoDto.setDataCriacao(departamento.getDataCriacao());
+        departamentoDto.setEmpresa(EmpresaDto.fromEntity(departamento.getEmpresa()));
         return departamentoDto;
     }
 
@@ -36,6 +43,8 @@ public class DepartamentoDto {
         departamento.setId(departamentoDto.getId());
         departamento.setNome(departamentoDto.getNome());
         departamento.setDescricao(departamentoDto.getDescricao());
+        departamento.setDataCriacao(departamentoDto.getDataCriacao());
+        departamento.setEmpresa(EmpresaDto.toEntity(departamentoDto.getEmpresa()));
         return departamento;
     }
 }

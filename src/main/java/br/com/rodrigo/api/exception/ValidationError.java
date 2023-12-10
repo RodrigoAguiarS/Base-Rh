@@ -9,8 +9,11 @@ import java.util.List;
 public class ValidationError extends StandardError {
 
     public static final String ERRO_CPF_DUPLICADO = "CPF já cadastrado. Por favor, insira um CPF único.";
+
     public static final String ERRO_EMAIL_DUPLICADO = "E-mail já cadastrado. Por favor, insira um e-mail único.";
+
     public static final String ERRO_USUARIO_NAO_ENCONTRADO_PARA_EMAIL = "Usuário não encontrado para o e-mail: ";
+
     public static final String ERRO_USUARIO_NAO_ENCONTRADO = "Usuário não encontrado";
 
     public static final String ERRO_REGISTRO_NAO_ENCONTRADO = "Registro não encontrado";
@@ -18,7 +21,9 @@ public class ValidationError extends StandardError {
     public static final String ERRO_REGISTRO_PONTO_PESSOA = "Já existe um registro de ponto para essa pessoa nessa data.";
 
     public static final String ERRO_DELETAR_USUARIO_FUNCIONARIO_EH_RESPONSAVEL_DEPARTAMENTO = "Não é possível excluir o usuário. O funcionário é responsável por um departamento.";
+
     public static final String ERRO_UID_EXPERIADO = "UID inválido ou expirado.";
+
     public static final String ERRO_ENVIAR_EMAIL = "Erro ao enviar o email para";
 
     public static final String ERRO_PESSOA_NAO_ENCONTRADA = "Pessoa não encontrada com o ID";
@@ -34,6 +39,10 @@ public class ValidationError extends StandardError {
     public static final String ERRO_FUNCINARIO_NAO_ENCONTRADO = "Funcionário não encontrado com o ID";
 
     public static final String ERRO_CARGO_NAO_ENCONTRADO = "Cargo não encontrado com o ID: ";
+
+    public static final String ERRO_DELETAR_EMPRESA_DEPARTAMENTO = "Não é possível excluir a empresa, pois ela possui departamentos.";
+
+    public static final String ERRO_EMPRESA_NAO_ENCONTRADO = "Empresa não encontrado com o ID: ";
 
     public static final String ERRO_RESPONSAVEL_DEPARTAMENTO_NAO_ENCONTRADO = "Responsável por Departamento não encontrado: ";
 

@@ -18,6 +18,7 @@ public class DetalhesDepartamentoDto {
     private String nome;
     private String descricao;
     private LocalDate dataCriacao;
+    private EmpresaDto empresa;
     private ResponsavelDepartamentoDto responsavelAtual;
 
     public static DetalhesDepartamentoDto fromEntity(Departamento departamento, ResponsavelDepartamento responsavelAtual) {
@@ -26,6 +27,10 @@ public class DetalhesDepartamentoDto {
         dto.setNome(departamento.getNome());
         dto.setDescricao(departamento.getDescricao());
         dto.setDataCriacao(departamento.getDataCriacao());
+
+        if (ValidatorUtil.isNotEmpty(departamento.getEmpresa())) {
+            dto.setEmpresa(EmpresaDto.fromEntity(departamento.getEmpresa()));
+        }
 
         if (ValidatorUtil.isNotEmpty(responsavelAtual)) {
             dto.setResponsavelAtual(ResponsavelDepartamentoDto.fromEntity(responsavelAtual));
