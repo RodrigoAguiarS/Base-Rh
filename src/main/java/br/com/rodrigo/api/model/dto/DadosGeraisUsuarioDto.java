@@ -1,8 +1,10 @@
 package br.com.rodrigo.api.model.dto;
 
+import br.com.rodrigo.api.model.Empresa;
 import br.com.rodrigo.api.model.Funcionario;
 import br.com.rodrigo.api.model.Perfil;
 import br.com.rodrigo.api.model.Pessoa;
+import br.com.rodrigo.api.model.ResponsavelDepartamento;
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.util.ValidatorUtil;
 import lombok.Data;
@@ -12,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
-public class UsuarioFuncionarioDto {
+public class DadosGeraisUsuarioDto {
 
     private Long id;
 
@@ -28,12 +30,20 @@ public class UsuarioFuncionarioDto {
 
     private LocalDate dataSaida;
 
+    private EmpresaDto empresa;
+
     private CargoDto cargo;
+
+    private ResponsavelDepartamentoDto responsavelDepartamento;
 
     private boolean ativo;
 
-    public static UsuarioFuncionarioDto fromEntity(Pessoa pessoa, Funcionario funcionario, Usuario usuario) {
-        UsuarioFuncionarioDto dto = new UsuarioFuncionarioDto();
+    public static DadosGeraisUsuarioDto fromEntity(Pessoa pessoa, Funcionario funcionario,
+                                                   Usuario usuario,
+                                                   ResponsavelDepartamento responsavelDepartamento,
+                                                   Empresa empresa) {
+
+        DadosGeraisUsuarioDto dto = new DadosGeraisUsuarioDto();
         dto.setPessoa(PessoaDto.fromEntity(pessoa));
         dto.setId(usuario.getId());
         dto.setEmail(usuario.getEmail());
@@ -46,6 +56,15 @@ public class UsuarioFuncionarioDto {
             dto.setDataSaida(funcionario.getDataSaida());
             dto.setCargo(CargoDto.fromEntity(funcionario.getCargo()));
         }
+
+        if (ValidatorUtil.isNotEmpty(empresa)) {
+            dto.setEmpresa(EmpresaDto.fromEntity(empresa));
+        }
+
+        if (ValidatorUtil.isNotEmpty(responsavelDepartamento)) {
+            dto.setResponsavelDepartamento(ResponsavelDepartamentoDto.fromEntity(responsavelDepartamento));
+        }
+
         return dto;
     }
 }
