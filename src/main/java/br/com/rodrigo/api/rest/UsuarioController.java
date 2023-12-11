@@ -2,9 +2,8 @@ package br.com.rodrigo.api.rest;
 
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
-import br.com.rodrigo.api.model.dto.DadosUsuariosDto;
 import br.com.rodrigo.api.model.dto.SenhaRecuperacaoDto;
-import br.com.rodrigo.api.model.dto.UsuarioFuncionarioDto;
+import br.com.rodrigo.api.model.dto.DadosGeraisUsuarioDto;
 import br.com.rodrigo.api.model.dto.UsuarioDto;
 import br.com.rodrigo.api.service.UsuarioService;
 import br.com.rodrigo.api.util.ValidatorUtil;
@@ -57,7 +56,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/dados")
-    public DadosUsuariosDto obterUsuarioPorEmail(Authentication authentication) {
+    public DadosGeraisUsuarioDto obterUsuarioPorEmail(Authentication authentication) {
         String email = authentication.getName();
         return usuarioService.obterUsuarioPorEmail(email);
     }
@@ -84,9 +83,9 @@ public class UsuarioController {
     }
 
     @GetMapping("/{usuarioId}/dados")
-    public ResponseEntity<UsuarioFuncionarioDto> obterPessoaEFuncionarioCompleto(@PathVariable Long usuarioId) {
-        UsuarioFuncionarioDto usuarioFuncionarioDto = usuarioService.obterUsuarioEhFuncionario(usuarioId);
-        return ResponseEntity.ok(usuarioFuncionarioDto);
+    public ResponseEntity<DadosGeraisUsuarioDto> obterPessoaEFuncionarioCompleto(@PathVariable Long usuarioId) {
+        DadosGeraisUsuarioDto dadosGeraisUsuarioDto = usuarioService.obterDadosGeraisUsuario(usuarioId);
+        return ResponseEntity.ok(dadosGeraisUsuarioDto);
     }
 
     @PutMapping("/alterar-senha/{id}")

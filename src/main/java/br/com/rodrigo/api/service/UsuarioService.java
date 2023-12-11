@@ -3,21 +3,25 @@ package br.com.rodrigo.api.service;
 import br.com.rodrigo.api.exception.ObjetoNaoEncontradoException;
 import br.com.rodrigo.api.exception.ViolocaoIntegridadeDadosException;
 import br.com.rodrigo.api.model.Cargo;
+import br.com.rodrigo.api.model.Departamento;
+import br.com.rodrigo.api.model.Empresa;
 import br.com.rodrigo.api.model.Endereco;
 import br.com.rodrigo.api.model.Funcionario;
 import br.com.rodrigo.api.model.Perfil;
 import br.com.rodrigo.api.model.Pessoa;
+import br.com.rodrigo.api.model.ResponsavelDepartamento;
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
-import br.com.rodrigo.api.model.dto.DadosUsuariosDto;
 import br.com.rodrigo.api.model.dto.EnderecoDto;
 import br.com.rodrigo.api.model.dto.PessoaDto;
-import br.com.rodrigo.api.model.dto.UsuarioFuncionarioDto;
+import br.com.rodrigo.api.model.dto.DadosGeraisUsuarioDto;
 import br.com.rodrigo.api.model.dto.UsuarioDto;
 import br.com.rodrigo.api.repository.CargoRepository;
+import br.com.rodrigo.api.repository.EmpresaRepository;
 import br.com.rodrigo.api.repository.EnderecoRepository;
 import br.com.rodrigo.api.repository.FuncionarioRepository;
 import br.com.rodrigo.api.repository.PessoaRepository;
+import br.com.rodrigo.api.repository.ResponsavelDepartamentoRepository;
 import br.com.rodrigo.api.repository.UsuarioRepository;
 import br.com.rodrigo.api.util.ValidatorUtil;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +39,9 @@ import java.util.stream.Collectors;
 
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_CARGO_NAO_ENCONTRADO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_DELETAR_USUARIO_FUNCIONARIO_EH_RESPONSAVEL_DEPARTAMENTO;
+import static br.com.rodrigo.api.exception.ValidationError.ERRO_EMPRESA_NAO_ENCONTRADO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_FUNCINARIO_NAO_ENCONTRADO;
-import static br.com.rodrigo.api.exception.ValidationError.ERRO_USUARIO_NAO_ASSOCIADA_AO_PESSOA;
+import static br.com.rodrigo.api.exception.ValidationError.ERRO_RESPONSAVEL_DEPARTAMENTO_NAO_ENCONTRADO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_USUARIO_NAO_ENCONTRADO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_USUARIO_NAO_ENCONTRADO_PARA_EMAIL;
 import static br.com.rodrigo.api.util.EmailMensagensUtil.CONFIRMACAO_CADASTRO;
@@ -64,7 +69,11 @@ public class UsuarioService {
 
     private final FuncionarioService funcionarioService;
 
+    private final EmpresaRepository empresaRepository;
+
     private final EmailService emailService;
+
+    private final ResponsavelDepartamentoRepository responsavelDepartamentoRepository;
 
 
     public UsuarioDto criarUsuario(CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
@@ -183,18 +192,16 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    public DadosUsuariosDto obterUsuarioPorEmail(String email) {
+    public DadosGeraisUsuarioDto obterUsuarioPorEmail(String email) {
         Usuario usuario = usuarioRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_USUARIO_NAO_ENCONTRADO_PARA_EMAIL + email));
 
-        Funcionario funcionario = funcionarioRepository.findByPessoaId(usuario.getPessoa().getId());
+        Pessoa pessoa = usuario.getPessoa();
+        Funcionario funcionario = getFuncionarioDoUsuarioLogado();
+        Empresa empresa = obterEmpresaDoFuncionario(funcionario);
+        ResponsavelDepartamento responsavelDepartamento = obterResponsavelDepartamentoDoCargo(funcionario);
 
-        DadosUsuariosDto dadosUsuariosDto = DadosUsuariosDto.fromEntity(usuario, funcionario);
-
-        if (ValidatorUtil.isNotEmpty(usuario.getPessoa())) {
-            CadastroUsuarioDto.fromEntity(usuario);
-        }
-        return dadosUsuariosDto;
+        return DadosGeraisUsuarioDto.fromEntity(pessoa, funcionario, usuario, responsavelDepartamento, empresa);
     }
 
     public List<Usuario> listarUsuarios(String email) {
@@ -211,7 +218,7 @@ public class UsuarioService {
         Pessoa pessoa = usuario.getPessoa();
 
         if (ValidatorUtil.isNotEmpty(pessoa)) {
-            Funcionario funcionario = funcionarioRepository.findByPessoaId(pessoa.getId());
+            Funcionario funcionario = getFuncionarioDoUsuarioLogado();
 
             if (ValidatorUtil.isNotEmpty(funcionario)) {
                 if (funcionarioService.funcionarioTemVinculoComDepartamento(funcionario)) {
@@ -235,20 +242,15 @@ public class UsuarioService {
         return senhaAleatoria;
     }
 
-    public UsuarioFuncionarioDto obterUsuarioEhFuncionario(Long usuarioId) {
+    public DadosGeraisUsuarioDto obterDadosGeraisUsuario(Long usuarioId) {
+        Usuario usuario = obterUsuario(usuarioId);
+        Pessoa pessoa = obterPessoaDoUsuario(usuario);
+        Funcionario funcionario = getFuncionarioDoUsuarioLogado();
+        Empresa empresa = obterEmpresaDoFuncionario(funcionario);
+        ResponsavelDepartamento responsavelDepartamento =
+                obterResponsavelDepartamentoDoCargo(funcionario);
 
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_DELETAR_USUARIO_FUNCIONARIO_EH_RESPONSAVEL_DEPARTAMENTO));
-
-        Pessoa pessoa = usuario.getPessoa();
-
-        if (ValidatorUtil.isEmpty(pessoa)) {
-            throw new ViolocaoIntegridadeDadosException(ERRO_USUARIO_NAO_ASSOCIADA_AO_PESSOA);
-        }
-
-        Funcionario funcionario = funcionarioRepository.findByPessoaId(pessoa.getId());
-
-        return UsuarioFuncionarioDto.fromEntity(pessoa, funcionario, usuario);
+        return DadosGeraisUsuarioDto.fromEntity(pessoa, funcionario, usuario, responsavelDepartamento, empresa );
     }
 
     public Usuario buscarPorNomeUsuario(String username) {
@@ -278,4 +280,25 @@ public class UsuarioService {
         return funcionarioRepository.findByPessoaId(usuario.getPessoa().getId());
     }
 
+    private Usuario obterUsuario(Long usuarioId) {
+        return usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_DELETAR_USUARIO_FUNCIONARIO_EH_RESPONSAVEL_DEPARTAMENTO));
+    }
+
+    private Pessoa obterPessoaDoUsuario(Usuario usuario) {
+        return usuario.getPessoa();
+    }
+
+    private Empresa obterEmpresaDoFuncionario(Funcionario funcionario) {
+        return empresaRepository.findById(funcionario.getCargo().getDepartamento().getEmpresa().getId())
+                .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_EMPRESA_NAO_ENCONTRADO));
+    }
+
+    public ResponsavelDepartamento obterResponsavelDepartamentoDoCargo(Funcionario funcionario) {
+
+        Departamento departamento = funcionario.getCargo().getDepartamento();
+
+        return (ResponsavelDepartamento) responsavelDepartamentoRepository.findByDepartamento(departamento)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_RESPONSAVEL_DEPARTAMENTO_NAO_ENCONTRADO));
+    }
 }
