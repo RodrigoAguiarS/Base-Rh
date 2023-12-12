@@ -5,8 +5,8 @@ import br.com.rodrigo.api.model.Cargo;
 import br.com.rodrigo.api.model.ResponsavelDepartamento;
 import br.com.rodrigo.api.model.dto.CargoDto;
 import br.com.rodrigo.api.model.dto.DetalhesCargoDto;
+import br.com.rodrigo.api.repository.ResponsavelDepartamentoRepository;
 import br.com.rodrigo.api.service.CargoService;
-import br.com.rodrigo.api.service.ResponsavelDepartamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ public class CargoController {
 
     private final CargoService cargoService;
 
-    private final ResponsavelDepartamentoService responsavelDepartamentoService;
+    private final ResponsavelDepartamentoRepository responsavelDepartamentoRepository;
 
     @GetMapping
     public ResponseEntity<List<Cargo>> getAllCargos() {
@@ -71,7 +71,7 @@ public class CargoController {
         Cargo cargo = cargoService.getCargoById(id)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_DEPARTAMENTO_NAO_ENCONTRADO));
 
-        ResponsavelDepartamento responsavelAtual = responsavelDepartamentoService.obterResponsavelAtual(cargo.getDepartamento().getId());
+        ResponsavelDepartamento responsavelAtual = responsavelDepartamentoRepository.findResponsavelDepartamentoByDepartamentoId(cargo.getDepartamento().getId());
 
         DetalhesCargoDto detalhesDto = DetalhesCargoDto.fromEntity(cargo, responsavelAtual);
 

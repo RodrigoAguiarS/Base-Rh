@@ -58,6 +58,14 @@ public class ResponsavelDepartamentoService {
 
     }
 
+    public ResponsavelDepartamento obterResponsavelDepartamentoDoCargo(Funcionario funcionario) {
+
+        Departamento departamento = funcionario.getCargo().getDepartamento();
+
+        return (ResponsavelDepartamento) responsavelDepartamentoRepository.findByDepartamento(departamento)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_RESPONSAVEL_DEPARTAMENTO_NAO_ENCONTRADO));
+    }
+
     public void verificarResponsabilidadeExistente(Long idFuncionario, Long idDepartamento) {
         Optional<ResponsavelDepartamento> responsabilidadeExistente = responsavelDepartamentoRepository
                 .findByFuncionarioIdAndDepartamentoId(idFuncionario, idDepartamento);
@@ -110,5 +118,17 @@ public class ResponsavelDepartamentoService {
 
     public ResponsavelDepartamento obterResponsavelAtual(Long idDepartamento) {
         return responsavelDepartamentoRepository.findResponsavelDepartamentoByDepartamentoId(idDepartamento);
+    }
+
+    public ResponsavelDepartamento findResponsavelDepartamentoByDepartamentoId(Long idDepartamento) {
+        return responsavelDepartamentoRepository.findResponsavelDepartamentoByDepartamentoId(idDepartamento);
+    }
+
+    public boolean existsByFuncionario(Funcionario funcionario) {
+        return responsavelDepartamentoRepository.existsByFuncionario(funcionario);
+    }
+
+    public boolean existsByDepartamentoId(Long idDepartamento) {
+        return responsavelDepartamentoRepository.existsByDepartamentoId(idDepartamento);
     }
 }

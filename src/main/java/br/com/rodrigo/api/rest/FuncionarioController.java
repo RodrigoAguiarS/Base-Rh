@@ -28,7 +28,7 @@ public class FuncionarioController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirFuncionario(@PathVariable Long id) {
-        funcionarioService.excluirFuncionario(id);
+        funcionarioService.deletarFuncionario(id);
         return ResponseEntity.noContent().build();
     }
 

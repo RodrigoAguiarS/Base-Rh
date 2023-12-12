@@ -3,6 +3,7 @@ package br.com.rodrigo.api.service;
 import br.com.rodrigo.api.exception.ObjetoNaoEncontradoException;
 import br.com.rodrigo.api.exception.ViolocaoIntegridadeDadosException;
 import br.com.rodrigo.api.model.Empresa;
+import br.com.rodrigo.api.model.Funcionario;
 import br.com.rodrigo.api.model.dto.EmpresaDto;
 import br.com.rodrigo.api.model.dto.EnderecoDto;
 import br.com.rodrigo.api.repository.DepartamentoRepository;
@@ -67,5 +68,14 @@ public class EmpresaService {
         }
 
         empresaRepository.deleteById(id);
+    }
+
+    Empresa obterEmpresaDoFuncionario(Funcionario funcionario) {
+        return empresaRepository.findById(funcionario.getCargo().getDepartamento().getEmpresa().getId())
+                .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_EMPRESA_NAO_ENCONTRADO));
+    }
+
+    Optional<Empresa> getEmpresaByIdOptional(Long id) {
+        return empresaRepository.findById(id);
     }
 }
