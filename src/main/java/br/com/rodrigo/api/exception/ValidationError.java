@@ -54,6 +54,8 @@ public class ValidationError extends StandardError {
 
     public static final String ERRO_DELETAR_CARGO_COM_FUNCIONARIO = "Não é possível excluir o cargo porque existem funcionários associados a ele.";
 
+    public static final String ERRO_VINCULO_NAO_ENCONTRADO = "Vínculo não encontrado";
+
     public static final String ERRO_DEPARTAMENTO_COM_RESPONSAVEL = "Este departamento já possui um responsável.";
 
     public static final String ERRO_FUNCIONARIO_RESPONSAVEL_DEPARTAMENTO = "O funcionário já é responsável por esta unidade.";

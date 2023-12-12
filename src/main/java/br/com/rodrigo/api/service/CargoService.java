@@ -79,4 +79,8 @@ public class CargoService {
         }
         cargoRepository.deleteById(idCargo);
     }
+
+    public boolean existsByDepartamentoId(Long idDerpatamento) {
+        return cargoRepository.existsByDepartamentoId(idDerpatamento);
+    }
 }

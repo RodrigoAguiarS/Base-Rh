@@ -28,6 +28,10 @@ public class Funcionario {
     @JoinColumn(name = "id_cargo")
     private Cargo cargo;
 
+    @ManyToOne
+    @JoinColumn(name = "id_vinculo")
+    private Vinculo vinculo;
+
     @Column(name = "data_entrada")
     private LocalDate dataEntrada;
 
