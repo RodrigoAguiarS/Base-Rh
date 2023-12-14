@@ -22,18 +22,18 @@ public class FuncionarioController {
 
     @GetMapping()
     public ResponseEntity<List<Funcionario>> listarFuncionarios() {
-        List<Funcionario> funcionarios = funcionarioService.listarTodosFuncionarios();
+        List<Funcionario> funcionarios = funcionarioService.listaTodosFuncionarios();
         return ResponseEntity.ok(funcionarios);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirFuncionario(@PathVariable Long id) {
-        funcionarioService.deletarFuncionario(id);
+        funcionarioService.deletaFuncionario(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/detalhes")
     public List<DetalhesFuncionarioDto> listarTodosDetalhesFuncionarios() {
-        return funcionarioService.listarTodosDetalhesFuncionarios();
+        return funcionarioService.listaTodosDetalhesFuncionarios();
     }
 }

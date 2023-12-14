@@ -33,7 +33,7 @@ public class EmpresaService {
         return EmpresaDto.fromEntity(savedEmpresa);
     }
 
-    public EmpresaDto atualizarEmpresa(Long id, EmpresaDto empresaDto) {
+    public EmpresaDto atualizaEmpresa(Long id, EmpresaDto empresaDto) {
         Optional<Empresa> empresaOptional = empresaRepository.findById(id);
 
         if (empresaOptional.isPresent()) {
@@ -49,12 +49,12 @@ public class EmpresaService {
         return null;
     }
 
-    public List<EmpresaDto> getAllEmpresas() {
+    public List<EmpresaDto> listaTodasEmpresas() {
         List<Empresa> empresas = empresaRepository.findAll();
         return empresas.stream().map(EmpresaDto::fromEntity).collect(Collectors.toList());
     }
 
-    public EmpresaDto getEmpresaById(Long id) {
+    public EmpresaDto obterEmpresaDtoPorId(Long id) {
         Optional<Empresa> empresaOptional = empresaRepository.findById(id);
         return empresaOptional.map(EmpresaDto::fromEntity)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_EMPRESA_NAO_ENCONTRADO));
@@ -75,7 +75,7 @@ public class EmpresaService {
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_EMPRESA_NAO_ENCONTRADO));
     }
 
-    Optional<Empresa> getEmpresaByIdOptional(Long id) {
+    Optional<Empresa> ObterEmpresaPorId(Long id) {
         return empresaRepository.findById(id);
     }
 }

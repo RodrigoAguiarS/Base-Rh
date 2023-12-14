@@ -29,11 +29,11 @@ public class DepartamentoService {
 
     private final EmpresaService empresaService;
 
-    public List<Departamento> listarTodosDepartamentos() {
+    public List<Departamento> listaTodosDepartamentos() {
         return departamentoRepository.findAll();
     }
 
-    public List<Departamento> listarDepartamentosSemResponsavel() {
+    public List<Departamento> listaDepartamentosSemResponsavel() {
         // Listar apenas departamentos que não possuem responsável
         return departamentoRepository.findAll()
                 .stream()
@@ -45,17 +45,17 @@ public class DepartamentoService {
         return departamentoRepository.findById(id);
     }
 
-    public Departamento cadastroDepartamento(DepartamentoDto departamentoDto) {
-        Empresa empresa = empresaService.getEmpresaByIdOptional(departamentoDto.getEmpresa().getId())
+    public Departamento cadastrarDepartamento(DepartamentoDto departamentoDto) {
+        Empresa empresa = empresaService.ObterEmpresaPorId(departamentoDto.getEmpresa().getId())
                 .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_EMPRESA_NAO_ENCONTRADO + departamentoDto.getEmpresa()));
         Departamento departamento = DepartamentoDto.toEntity(departamentoDto);
         departamento.setEmpresa(empresa);
         return departamentoRepository.save(departamento);
     }
 
-    public Departamento atualizarDepartamento(Long id, DepartamentoDto departamentoDto) {
+    public Departamento atualizaDepartamento(Long id, DepartamentoDto departamentoDto) {
         Optional<Departamento> optionalDepartamento = departamentoRepository.findById(id);
-        Empresa empresa = empresaService.getEmpresaByIdOptional(departamentoDto.getEmpresa().getId())
+        Empresa empresa = empresaService.ObterEmpresaPorId(departamentoDto.getEmpresa().getId())
                 .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_EMPRESA_NAO_ENCONTRADO + departamentoDto.getEmpresa()));
 
         return optionalDepartamento.map(dep -> {

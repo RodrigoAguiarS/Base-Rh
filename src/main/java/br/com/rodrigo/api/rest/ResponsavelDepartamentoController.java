@@ -36,7 +36,7 @@ public class ResponsavelDepartamentoController {
     @GetMapping()
     public ResponseEntity<List<ResponsavelDepartamento>> listarUsuarios() {
         List<ResponsavelDepartamento> responsavelDepartamentos =
-                responsavelDepartamentoService.listarTodosResponsavelDepartamentos();
+                responsavelDepartamentoService.listaTodosResponsavelDepartamentos();
         return ResponseEntity.ok(responsavelDepartamentos);
     }
 

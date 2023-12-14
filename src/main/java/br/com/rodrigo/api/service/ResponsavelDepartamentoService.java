@@ -53,7 +53,7 @@ public class ResponsavelDepartamentoService {
         return ResponsavelDepartamentoDto.fromEntity(salvoResponsavelDepartamento);
     }
 
-    public List<ResponsavelDepartamento> listarTodosResponsavelDepartamentos() {
+    public List<ResponsavelDepartamento> listaTodosResponsavelDepartamentos() {
         return responsavelDepartamentoRepository.findAll();
 
     }

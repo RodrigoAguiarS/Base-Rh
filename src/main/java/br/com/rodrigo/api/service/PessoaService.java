@@ -24,7 +24,7 @@ public class PessoaService {
 
     private final EnderecoService enderecoService;
 
-    public Pessoa atualizarPessoaExistente(Pessoa pessoaExistente, CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
+    public Pessoa atualizaPessoaExistente(Pessoa pessoaExistente, CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
         String email = cadastroUsuarioDto.getEmail();
         validarCpfExistenteComId(pessoaRepository, email, pessoaExistente.getId());
         PessoaDto pessoaDto = cadastroUsuarioDto.getPessoa();
@@ -39,11 +39,11 @@ public class PessoaService {
         return pessoaRepository.save(pessoaAtualizada);
     }
 
-    public Pessoa salvarNovaPessoa(CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
+    public Pessoa cadastrarNovaPessoa(CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
         Pessoa novaPessoa = PessoaDto.toEntity(cadastroUsuarioDto.getPessoa());
         String cpf = cadastroUsuarioDto.getPessoa().getCpf();
         validarCpfExistente(pessoaRepository, cpf);
-        novaPessoa.setEndereco(enderecoService.salvarEndereco(cadastroUsuarioDto));
+        novaPessoa.setEndereco(enderecoService.cadastrarEndereco(cadastroUsuarioDto));
         return pessoaRepository.save(novaPessoa);
     }
 
@@ -51,7 +51,7 @@ public class PessoaService {
         return usuario.getPessoa();
     }
 
-    public void deletarPessoa(Long id) {
+    public void deletePessoa(Long id) {
         pessoaRepository.deleteById(id);
     }
 }

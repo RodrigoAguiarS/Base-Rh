@@ -43,6 +43,8 @@ public class  CadastroUsuarioDto implements Serializable {
 
     private CargoDto cargo;
 
+    private VinculoDto vinculo;
+
     private LocalDate dataEntrada;
 
     public Set<Perfil> getPerfis() {

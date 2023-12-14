@@ -13,7 +13,7 @@ public class EnderecoService {
 
     private final EnderecoRepository enderecoRepository;
 
-    public Endereco salvarEndereco(CadastroUsuarioDto cadastroUsuarioDto) {
+    public Endereco cadastrarEndereco(CadastroUsuarioDto cadastroUsuarioDto) {
         Endereco endereco = EnderecoDto.toEntity(cadastroUsuarioDto.getPessoa().getEndereco());
         return enderecoRepository.save(endereco);
     }
