@@ -29,8 +29,6 @@ import java.util.stream.Collectors;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_DELETAR_USUARIO_FUNCIONARIO_EH_RESPONSAVEL_DEPARTAMENTO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_USUARIO_NAO_ENCONTRADO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_USUARIO_NAO_ENCONTRADO_PARA_EMAIL;
-import static br.com.rodrigo.api.util.EmailMensagensUtil.CONFIRMACAO_CADASTRO;
-import static br.com.rodrigo.api.util.EmailMensagensUtil.getEmailCadastroTexto;
 import static br.com.rodrigo.api.util.ValidatorUtil.validarEmailExistente;
 import static br.com.rodrigo.api.util.ValidatorUtil.validarEmailExistenteComId;
 
@@ -53,8 +51,8 @@ public class UsuarioService {
     private final ResponsavelDepartamentoService responsavelDepartamentoService;
 
 
-    public UsuarioDto criarUsuario(CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
-        Pessoa pessoaSalva = pessoaService.salvarNovaPessoa(cadastroUsuarioDto);
+    public UsuarioDto cadastrarUsuario(CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
+        Pessoa pessoaSalva = pessoaService.cadastrarNovaPessoa(cadastroUsuarioDto);
         Set<Perfil> perfis = cadastroUsuarioDto.getPerfis().stream()
                 .map(idPerfil -> Perfil.toEnum(idPerfil.getId()))
                 .collect(Collectors.toSet());
@@ -79,15 +77,15 @@ public class UsuarioService {
         return usuarioRepository.save(novoUsuario);
     }
 
-    public UsuarioDto atualizarUsuario(Long id, CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
+    public UsuarioDto atualizaUsuario(Long id, CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
         Usuario usuarioExistente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_USUARIO_NAO_ENCONTRADO));
 
-        Pessoa pessoaAtualizada = pessoaService.atualizarPessoaExistente(usuarioExistente.getPessoa(), cadastroUsuarioDto);
-        Funcionario funcionario = funcionarioService.buscarFuncionarioPorIdPessoa(pessoaAtualizada.getId());
+        Pessoa pessoaAtualizada = pessoaService.atualizaPessoaExistente(usuarioExistente.getPessoa(), cadastroUsuarioDto);
+        Funcionario funcionario = funcionarioService.buscaFuncionarioPorIdPessoa(pessoaAtualizada.getId());
 
         if(ValidatorUtil.isNotEmpty(funcionario)) {
-            funcionarioService.atualizarFuncionario(funcionario.getId(), cadastroUsuarioDto);
+            funcionarioService.atualizaFuncionario(funcionario.getId(), cadastroUsuarioDto);
         }
         Set<Perfil> perfisAtualizados = cadastroUsuarioDto.getPerfis().stream()
                 .map(idPerfil -> Perfil.toEnum(idPerfil.getId()))
@@ -130,31 +128,31 @@ public class UsuarioService {
         return DadosGeraisUsuarioDto.fromEntity(pessoa, funcionario, usuario, responsavelDepartamento, empresa);
     }
 
-    public List<Usuario> listarUsuarios(String email) {
+    public List<Usuario> listaUsuarios(String email) {
         List<Usuario> usuarios = usuarioRepository.findAll();
         usuarios.removeIf(usuario -> usuario.getUsername().equals(email));
         return usuarios;
     }
 
     @Transactional
-    public void deletarUsuario(Long idUsuario) {
+    public void deleteUsuario(Long idUsuario) {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_USUARIO_NAO_ENCONTRADO));
 
         Pessoa pessoa = usuario.getPessoa();
 
         if (ValidatorUtil.isNotEmpty(pessoa)) {
-            Funcionario funcionario = funcionarioService.buscarFuncionarioPorIdPessoa(pessoa.getId());
+            Funcionario funcionario = funcionarioService.buscaFuncionarioPorIdPessoa(pessoa.getId());
 
             if (ValidatorUtil.isNotEmpty(funcionario)) {
                 if (funcionarioService.funcionarioTemVinculoComDepartamento(funcionario)) {
                     throw new ViolocaoIntegridadeDadosException(ERRO_DELETAR_USUARIO_FUNCIONARIO_EH_RESPONSAVEL_DEPARTAMENTO);
                 }
 
-                funcionarioService.deletarFuncionario(funcionario.getId());
+                funcionarioService.deletaFuncionario(funcionario.getId());
             }
 
-            pessoaService.deletarPessoa(pessoa.getId());
+            pessoaService.deletePessoa(pessoa.getId());
         }
 
         usuarioRepository.deleteById(idUsuario);
@@ -171,7 +169,7 @@ public class UsuarioService {
     public DadosGeraisUsuarioDto obterDadosGeraisUsuario(Long usuarioId) {
         Usuario usuario = obterUsuario(usuarioId);
         Pessoa pessoa = pessoaService.obterPessoaDoUsuario(usuario);
-        Funcionario funcionario = funcionarioService.buscarFuncionarioPorIdPessoa(pessoa.getId());
+        Funcionario funcionario = funcionarioService.buscaFuncionarioPorIdPessoa(pessoa.getId());
         Empresa empresa = empresaService.obterEmpresaDoFuncionario(funcionario);
         ResponsavelDepartamento responsavelDepartamento =
                 responsavelDepartamentoService.obterResponsavelDepartamentoDoCargo(funcionario);
@@ -179,12 +177,12 @@ public class UsuarioService {
         return DadosGeraisUsuarioDto.fromEntity(pessoa, funcionario, usuario, responsavelDepartamento, empresa );
     }
 
-    public Usuario buscarPorNomeUsuario(String username) {
+    public Usuario buscaPorNomeUsuario(String username) {
         return usuarioRepository.findByEmailIgnoreCase(username)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_USUARIO_NAO_ENCONTRADO));
     }
 
-    public void alterarSenha(Long idUsuario, String novaSenha) {
+    public void alteraSenha(Long idUsuario, String novaSenha) {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_USUARIO_NAO_ENCONTRADO));
 
@@ -196,14 +194,14 @@ public class UsuarioService {
     public Funcionario getFuncionarioDoUsuarioLogado() {
         Usuario usuario = obterUsuarioLogado();
 
-        return funcionarioService.buscarFuncionarioPorIdPessoa(usuario.getPessoa().getId());
+        return funcionarioService.buscaFuncionarioPorIdPessoa(usuario.getPessoa().getId());
     }
 
     public Usuario obterUsuarioLogado() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return buscarPorNomeUsuario(authentication.getName());
+        return buscaPorNomeUsuario(authentication.getName());
     }
 
     private Usuario obterUsuario(Long usuarioId) {

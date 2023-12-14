@@ -36,13 +36,13 @@ public class DepartamentoController {
 
     @GetMapping
     public ResponseEntity<List<Departamento>> getAllDepartamentos() {
-        List<Departamento> departamentos = departamentoService.listarTodosDepartamentos();
+        List<Departamento> departamentos = departamentoService.listaTodosDepartamentos();
         return new ResponseEntity<>(departamentos, HttpStatus.OK);
     }
 
     @GetMapping("/semReponsavel")
     public ResponseEntity<List<Departamento>> getAllDepartamentosSemResponsavel() {
-        List<Departamento> departamentos = departamentoService.listarDepartamentosSemResponsavel();
+        List<Departamento> departamentos = departamentoService.listaDepartamentosSemResponsavel();
         return new ResponseEntity<>(departamentos, HttpStatus.OK);
     }
 
@@ -55,13 +55,13 @@ public class DepartamentoController {
 
     @PostMapping
     public ResponseEntity<Departamento> saveDepartamento(@Valid @RequestBody DepartamentoDto departamentoDto) {
-        Departamento savedDepartamento = departamentoService.cadastroDepartamento(departamentoDto);
+        Departamento savedDepartamento = departamentoService.cadastrarDepartamento(departamentoDto);
         return new ResponseEntity<>(savedDepartamento, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Departamento> updateDepartamento(@Valid @PathVariable Long id, @RequestBody DepartamentoDto departamentoDto) {
-        Departamento updatedDepartamento = departamentoService.atualizarDepartamento(id, departamentoDto);
+        Departamento updatedDepartamento = departamentoService.atualizaDepartamento(id, departamentoDto);
         return new ResponseEntity<>(updatedDepartamento, HttpStatus.OK);
     }
 

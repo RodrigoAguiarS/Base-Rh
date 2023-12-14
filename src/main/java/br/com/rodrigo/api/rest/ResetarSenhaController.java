@@ -41,7 +41,7 @@ public class ResetarSenhaController {
     @PostMapping("/login-alterar/{uid}")
     public ResponseEntity<?> atualizarSenha(@PathVariable("uid") String uid,
                                             @RequestBody SenhaRecuperacaoDto solicitacao) {
-        resetarSenhaService.atualizarSenha(uid, solicitacao);
+        resetarSenhaService.atualizaSenha(uid, solicitacao);
         return ResponseEntity.ok().build();
     }
 }

@@ -57,7 +57,7 @@ public class ResetarSenhaService {
         return resetarSenhaRepository.findByUidAndAtivo(uid, true);
     }
 
-    public void atualizarSenha(String uid, SenhaRecuperacaoDto solicitacao) {
+    public void atualizaSenha(String uid, SenhaRecuperacaoDto solicitacao) {
         Optional<ResetarSenhaToken> tokenOptional = resetarSenhaRepository.findByUidAndAtivo(uid, true);
         if (tokenOptional.isEmpty()) {
             throw new ViolocaoIntegridadeDadosException(ERRO_UID_EXPERIADO);

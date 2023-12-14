@@ -35,13 +35,13 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDto> criarUsuario(@RequestBody @Valid CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
-        UsuarioDto novoUsuarioDto = usuarioService.criarUsuario(cadastroUsuarioDto);
+        UsuarioDto novoUsuarioDto = usuarioService.cadastrarUsuario(cadastroUsuarioDto);
         return new ResponseEntity<>(novoUsuarioDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{idUsuario}")
     public ResponseEntity<UsuarioDto> atualizarUsuario(@Valid @PathVariable Long idUsuario, @RequestBody CadastroUsuarioDto cadastroUsuarioDto) throws ParseException {
-        UsuarioDto usuarioAtualizadoDto = usuarioService.atualizarUsuario(idUsuario, cadastroUsuarioDto);
+        UsuarioDto usuarioAtualizadoDto = usuarioService.atualizaUsuario(idUsuario, cadastroUsuarioDto);
         if (ValidatorUtil.isNotEmpty(usuarioAtualizadoDto)) {
             return ResponseEntity.ok(usuarioAtualizadoDto);
         } else {
@@ -71,14 +71,14 @@ public class UsuarioController {
     @GetMapping()
     public ResponseEntity<List<Usuario>> listarUsuarios(Authentication authentication) {
         String email = authentication.getName();
-        List<Usuario> usuarios = usuarioService.listarUsuarios(email);
+        List<Usuario> usuarios = usuarioService.listaUsuarios(email);
         return ResponseEntity.ok(usuarios);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN_GERAL')")
     @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long idUsuario) {
-        usuarioService.deletarUsuario(idUsuario);
+        usuarioService.deleteUsuario(idUsuario);
         return ResponseEntity.noContent().build();
     }
 
@@ -91,7 +91,7 @@ public class UsuarioController {
     @PutMapping("/alterar-senha/{id}")
     public ResponseEntity<?> alterarSenha(@PathVariable Long id,
                                                @RequestBody SenhaRecuperacaoDto senhaRecuperacaoDto) {
-        usuarioService.alterarSenha(id, senhaRecuperacaoDto.getSenha());
+        usuarioService.alteraSenha(id, senhaRecuperacaoDto.getSenha());
         return ResponseEntity.ok().build();
     }
 }

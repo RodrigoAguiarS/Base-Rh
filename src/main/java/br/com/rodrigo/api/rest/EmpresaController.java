@@ -33,7 +33,7 @@ public class EmpresaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EmpresaDto> updateEmpresa(@PathVariable Long id, @RequestBody EmpresaDto empresaDto) {
-        EmpresaDto updatedEmpresa = empresaService.atualizarEmpresa(id, empresaDto);
+        EmpresaDto updatedEmpresa = empresaService.atualizaEmpresa(id, empresaDto);
         if (ValidatorUtil.isNotEmpty(updatedEmpresa)) {
             return ResponseEntity.ok(updatedEmpresa);
         } else {
@@ -43,13 +43,13 @@ public class EmpresaController {
 
     @GetMapping
     public ResponseEntity<List<EmpresaDto>> getAllEmpresas() {
-        List<EmpresaDto> empresas = empresaService.getAllEmpresas();
+        List<EmpresaDto> empresas = empresaService.listaTodasEmpresas();
         return ResponseEntity.ok(empresas);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EmpresaDto> getEmpresaById(@PathVariable Long id) {
-        EmpresaDto empresa = empresaService.getEmpresaById(id);
+        EmpresaDto empresa = empresaService.obterEmpresaDtoPorId(id);
         if (ValidatorUtil.isNotEmpty(empresa)) {
             return ResponseEntity.ok(empresa);
         } else {

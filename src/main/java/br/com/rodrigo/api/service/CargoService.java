@@ -37,7 +37,7 @@ public class CargoService {
         return cargoRepository.findById(id);
     }
 
-    public CargoDto salvarCargo(CargoDto cargoDto) {
+    public CargoDto cadastrarCargo(CargoDto cargoDto) {
         Departamento departamento = departamentoRepository.findById(cargoDto.getDepartamento().getId())
                 .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_CARGO_NAO_ENCONTRADO + cargoDto.getDepartamento()));
 
@@ -53,7 +53,7 @@ public class CargoService {
         return savedCargoDto;
     }
 
-    public CargoDto atualizarCargo(Long id, CargoDto cargoDto) {
+    public CargoDto atualizaCargo(Long id, CargoDto cargoDto) {
         Cargo cargoExistente = cargoRepository.findById(id)
                 .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_CARGO_NAO_ENCONTRADO));
 

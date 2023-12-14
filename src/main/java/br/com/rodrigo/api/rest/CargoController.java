@@ -49,13 +49,13 @@ public class CargoController {
 
     @PostMapping
     public ResponseEntity<CargoDto> saveCargo(@Valid @RequestBody CargoDto cargoDto) {
-        CargoDto savedCargoDto = cargoService.salvarCargo(cargoDto);
+        CargoDto savedCargoDto = cargoService.cadastrarCargo(cargoDto);
         return new ResponseEntity<>(savedCargoDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CargoDto> updateCargo(@Valid @PathVariable Long id, @RequestBody CargoDto cargoDto) {
-        CargoDto updatedCargoDto = cargoService.atualizarCargo(id, cargoDto);
+        CargoDto updatedCargoDto = cargoService.atualizaCargo(id, cargoDto);
         return new ResponseEntity<>(updatedCargoDto, HttpStatus.OK);
     }
 

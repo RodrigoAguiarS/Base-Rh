@@ -70,7 +70,7 @@ public class ImpersonationController {
     public ResponseEntity<DadosUsuariosDto> getUserInfo(@RequestParam("token") String token) {
         String username = jwtUtil.getUsername(token);
 
-        Usuario usuario = usuarioService.buscarPorNomeUsuario(username);
+        Usuario usuario = usuarioService.buscaPorNomeUsuario(username);
 
         Funcionario funcionario = usuarioService.getFuncionarioDoUsuarioLogado();
 
