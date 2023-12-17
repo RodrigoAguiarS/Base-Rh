@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 
 
@@ -61,7 +60,7 @@ public class PessoaDto {
         return dto;
     }
 
-    public static Pessoa toEntity(PessoaDto dto) throws ParseException {
+    public static Pessoa toEntity(PessoaDto dto) {
         Pessoa pessoa = new Pessoa();
         pessoa.setId(dto.getId());
         pessoa.setNome(dto.getNome());

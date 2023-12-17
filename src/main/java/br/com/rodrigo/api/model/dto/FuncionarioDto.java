@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.text.ParseException;
 import java.time.LocalDate;
 
 
@@ -26,6 +25,10 @@ public class FuncionarioDto {
     @NotBlank(message = "Campo cargo não pode estar em branco")
     private CargoDto cargo;
 
+    @NotNull(message = "Campo vinculo é requerido")
+    @NotBlank(message = "Campo vinculo não pode estar em branco")
+    private VinculoDto vinculo;
+
     private LocalDate dataEntrada;
 
     private LocalDate dataSaida;
@@ -36,17 +39,19 @@ public class FuncionarioDto {
         dto.setId(funcionario.getId());
         dto.setPessoa(PessoaDto.fromEntity(funcionario.getPessoa()));
         dto.setCargo(CargoDto.fromEntity(funcionario.getCargo()));
+        dto.setVinculo(VinculoDto.fromEntity(funcionario.getVinculo()));
         dto.setDataEntrada(funcionario.getDataEntrada());
         dto.setDataSaida(funcionario.getDataSaida());
 
         return dto;
     }
 
-    public static Funcionario toEntity(FuncionarioDto dto) throws ParseException {
+    public static Funcionario toEntity(FuncionarioDto dto) {
         Funcionario funcionario = new Funcionario();
         funcionario.setId(dto.getId());
         funcionario.setPessoa(PessoaDto.toEntity(dto.getPessoa()));
         funcionario.setCargo(CargoDto.toEntity(dto.getCargo()));
+        funcionario.setVinculo(VinculoDto.toEntity(dto.getVinculo()));
         funcionario.setDataEntrada(dto.getDataEntrada());
         funcionario.setDataSaida(dto.getDataSaida());
 
