@@ -32,6 +32,8 @@ public class DadosGeraisUsuarioDto {
 
     private EmpresaDto empresa;
 
+    private VinculoDto vinculo;
+
     private CargoDto cargo;
 
     private ResponsavelDepartamentoDto responsavelDepartamento;
@@ -59,6 +61,10 @@ public class DadosGeraisUsuarioDto {
 
         if (ValidatorUtil.isNotEmpty(empresa)) {
             dto.setEmpresa(EmpresaDto.fromEntity(empresa));
+        }
+
+        if (ValidatorUtil.isNotEmpty(funcionario.getVinculo())) {
+            dto.setVinculo(VinculoDto.fromEntity(funcionario.getVinculo()));
         }
 
         if (ValidatorUtil.isNotEmpty(responsavelDepartamento)) {
