@@ -10,6 +10,8 @@ public class ValidationError extends StandardError {
 
     public static final String ERRO_CPF_DUPLICADO = "CPF já cadastrado. Por favor, insira um CPF único.";
 
+    public static final String ERRO_FUNCIONARIO_JA_DEMITIDO = "Funcionário já foi demitido";
+
     public static final String ERRO_EMAIL_DUPLICADO = "E-mail já cadastrado. Por favor, insira um e-mail único.";
 
     public static final String ERRO_USUARIO_NAO_ENCONTRADO_PARA_EMAIL = "Usuário não encontrado para o e-mail: ";
@@ -57,6 +59,8 @@ public class ValidationError extends StandardError {
     public static final String ERRO_VINCULO_NAO_ENCONTRADO = "Vínculo não encontrado";
 
     public static final String ERRO_DEPARTAMENTO_COM_RESPONSAVEL = "Este departamento já possui um responsável.";
+
+    public static final String ERRO_DATA_SAIDA_FUNCINARIO = "A data de saída do funcionário pode estar preenchida";
 
     public static final String ERRO_FUNCIONARIO_RESPONSAVEL_DEPARTAMENTO = "O funcionário já é responsável por esta unidade.";
     private static final long serialVersionUID = 1L;

@@ -19,7 +19,7 @@ import static br.com.rodrigo.api.exception.ValidationError.ERRO_EMPRESA_NAO_ENCO
 
 @Service
 @RequiredArgsConstructor
-public class DepartamentoService {
+public class  DepartamentoService {
 
     private final DepartamentoRepository departamentoRepository;
 

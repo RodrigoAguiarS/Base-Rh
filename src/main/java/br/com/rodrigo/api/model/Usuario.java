@@ -53,7 +53,7 @@ public class Usuario implements UserDetails {
     private Pessoa pessoa;
 
     @Column(name = "ativo")
-    private boolean ativo;
+    private Boolean ativo;
 
     public Usuario(Long id, String email, String senha, Set<Perfil> perfis) {
         super();

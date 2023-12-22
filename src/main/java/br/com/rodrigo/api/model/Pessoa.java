@@ -37,6 +37,9 @@ public class Pessoa {
     @Column(name = "sexo")
     private String sexo;
 
+    @Column(name = "ativo")
+    private Boolean ativo;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco")
     private Endereco endereco;

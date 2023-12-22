@@ -130,6 +130,7 @@ public class UsuarioService {
 
     public List<Usuario> listaUsuarios(String email) {
         List<Usuario> usuarios = usuarioRepository.findAll();
+        usuarios.removeIf(usuario -> !usuario.getPessoa().getAtivo());
         usuarios.removeIf(usuario -> usuario.getUsername().equals(email));
         return usuarios;
     }

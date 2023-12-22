@@ -17,6 +17,7 @@ public class DetalhesFuncionarioDto {
     private Long id;
     private PessoaDto pessoa;
     private CargoDto cargo;
+    private VinculoDto vinculo;
     private LocalDate dataAdmissao;
     private ResponsavelDepartamentoDto responsavelAtual;
 
@@ -25,6 +26,7 @@ public class DetalhesFuncionarioDto {
         dto.setId(funcionario.getId());
         dto.setPessoa(PessoaDto.fromEntity(funcionario.getPessoa()));
         dto.setCargo(CargoDto.fromEntity(funcionario.getCargo()));
+        dto.setVinculo(VinculoDto.fromEntity(funcionario.getVinculo()));
         dto.setDataAdmissao(funcionario.getDataEntrada());
 
         if (ValidatorUtil.isNotEmpty(responsavelAtual)) {
