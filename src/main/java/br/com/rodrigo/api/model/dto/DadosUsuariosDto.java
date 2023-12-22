@@ -53,7 +53,7 @@ public class DadosUsuariosDto implements Serializable {
         DadosUsuariosDto dto = new DadosUsuariosDto();
         dto.setId(cadastroUsuario.getId());
         dto.setEmail(cadastroUsuario.getEmail());
-        dto.setAtivo(cadastroUsuario.isAtivo());
+        dto.setAtivo(cadastroUsuario.getAtivo());
 
         if (ValidatorUtil.isNotEmpty(funcionario.getCargo())) {
             dto.setCargo(CargoDto.fromEntity(funcionario.getCargo()));

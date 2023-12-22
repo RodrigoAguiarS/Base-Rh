@@ -49,7 +49,7 @@ public class DadosGeraisUsuarioDto {
         dto.setPessoa(PessoaDto.fromEntity(pessoa));
         dto.setId(usuario.getId());
         dto.setEmail(usuario.getEmail());
-        dto.setAtivo(usuario.isAtivo());
+        dto.setAtivo(usuario.getAtivo());
         dto.setPerfis(usuario.getPerfis().stream().map(Perfil::getDescricao).collect(Collectors.toSet()));
 
         if (ValidatorUtil.isNotEmpty(funcionario)) {

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -41,6 +42,8 @@ public class PessoaDto {
 
     private String sexo;
 
+    private Boolean ativo;
+
     @Valid
     private EnderecoDto endereco;
 
@@ -50,6 +53,7 @@ public class PessoaDto {
         dto.setNome(pessoa.getNome());
         dto.setTelefone(pessoa.getTelefone());
         dto.setCpf(pessoa.getCpf());
+        dto.setAtivo(pessoa.getAtivo());
         dto.setDataNascimento(pessoa.getDataNascimento());
         dto.setSexo(pessoa.getSexo());
 
@@ -66,6 +70,7 @@ public class PessoaDto {
         pessoa.setNome(dto.getNome());
         pessoa.setTelefone(dto.getTelefone());
         pessoa.setCpf(dto.getCpf());
+        pessoa.setAtivo(dto.getAtivo());
         pessoa.setDataNascimento(dto.getDataNascimento());
         pessoa.setSexo(dto.getSexo());
 
