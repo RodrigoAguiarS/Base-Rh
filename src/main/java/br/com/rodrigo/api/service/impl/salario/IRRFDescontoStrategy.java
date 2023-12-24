@@ -13,7 +13,7 @@ public class IRRFDescontoStrategy implements DescontoStrategy {
         BigDecimal divisor = BigDecimal.valueOf(100);
 
         if (salario.compareTo(IRRFConstantes.LIMITE_FAIXA1) <= 0) {
-            return BigDecimal.ZERO; // Isenção
+            return IRRFConstantes.ALIQUOTA_FAIXA1; // Isenção
         } else if (salario.compareTo(IRRFConstantes.LIMITE_FAIXA2) <= 0) {
             return salario.divide(divisor, 2, RoundingMode.HALF_UP)
                     .multiply(IRRFConstantes.ALIQUOTA_FAIXA2);

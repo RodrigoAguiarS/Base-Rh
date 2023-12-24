@@ -62,6 +62,8 @@ public class ValidationError extends StandardError {
 
     public static final String ERRO_DATA_SAIDA_FUNCINARIO = "A data de saída do funcionário pode estar preenchida";
 
+    public static final String ERRO_TIPO_DEMISAO_NAO_ENCONTRADO = "Tipo Demissão não encontrado";
+
     public static final String ERRO_FUNCIONARIO_RESPONSAVEL_DEPARTAMENTO = "O funcionário já é responsável por esta unidade.";
     private static final long serialVersionUID = 1L;
 

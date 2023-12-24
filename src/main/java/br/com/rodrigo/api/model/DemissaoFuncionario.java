@@ -31,11 +31,10 @@ public class DemissaoFuncionario {
     @Column(name = "data_saida", nullable = false)
     private LocalDate dataSaida;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_demissao", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_tipo_demissao", nullable = false)
     private TipoDemissao tipoDemissao;
 
     @Column(name = "motivo", nullable = false)
     private String motivo;
-
 }

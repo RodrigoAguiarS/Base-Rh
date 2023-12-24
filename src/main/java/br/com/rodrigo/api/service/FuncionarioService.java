@@ -69,7 +69,7 @@ public class FuncionarioService {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
 
         return funcionarios.stream()
-                .filter(funcionario -> funcionario.getDataSaida() == null || ValidatorUtil.isEmpty(funcionario.getDataSaida()))
+                .filter(funcionario -> funcionario.getPessoa().getAtivo())
                 .map(funcionario -> {
                     ResponsavelDepartamento responsavelDepartamento = responsavelDepartamentoService
                             .findResponsavelDepartamentoByDepartamentoId(funcionario.getCargo().getDepartamento().getId());
@@ -84,8 +84,10 @@ public class FuncionarioService {
     public void cadastrarFuncionario(CadastroUsuarioDto cadastroUsuarioDto, Pessoa pessoa) {
         Cargo cargo = cargoService.getCargoById(cadastroUsuarioDto.getCargo().getId())
                 .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_CARGO_NAO_ENCONTRADO));
+
         Vinculo vinculo = vinculoService.getVinculoById(cadastroUsuarioDto.getVinculo().getId())
                 .orElseThrow(() -> new ViolocaoIntegridadeDadosException(ERRO_VINCULO_NAO_ENCONTRADO));
+
         Funcionario funcionario = new Funcionario();
         funcionario.setCargo(cargo);
         funcionario.setPessoa(pessoa);
@@ -142,7 +144,7 @@ public class FuncionarioService {
     }
 
     private void demitirResponsavelDepartamento(Funcionario funcionario) {
-        if (responsavelDepartamentoService.existsByFuncionario(funcionario)) {
+        if (funcionarioTemVinculoComDepartamento(funcionario)) {
             throw new ViolocaoIntegridadeDadosException(ERRO_DELETAR_USUARIO_FUNCIONARIO_EH_RESPONSAVEL_DEPARTAMENTO);
         }
     }
