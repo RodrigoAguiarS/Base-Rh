@@ -1,22 +1,33 @@
 package br.com.rodrigo.api.model;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-public enum TipoDemissao {
-    SEM_JUSTA_CAUSA("Sem Justa Causa"),
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-    COM_JUSTA_CAUSA("Com Justa Causa"),
+@Entity
+@Table(name = "TipoDemissao")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class TipoDemissao {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_tipo_demissao")
+    private Long id;
 
-    PEDIDO_DE_DEMISSAO("Pedido de Demissão"),
+    @Column(name = "nome")
+    private String nome;
 
-    ACORDO_ENTRE_PARTES("Acordo entre Partes"),
+    @Column(name = "descricao")
+    private String descricao;
 
-    DEMISSAO_CONSENSUAL("Demissão Consensual");
-
-    private final String descricao;
-
-    TipoDemissao(String descricao) {
-        this.descricao = descricao;
-    }
+    @Column(name = "ativo")
+    private boolean ativo;
 }
