@@ -7,6 +7,7 @@ import br.com.rodrigo.api.model.Cargo;
 import br.com.rodrigo.api.model.Funcionario;
 import br.com.rodrigo.api.model.Pessoa;
 import br.com.rodrigo.api.model.ResponsavelDepartamento;
+import br.com.rodrigo.api.model.TipoDesconto;
 import br.com.rodrigo.api.model.Usuario;
 import br.com.rodrigo.api.model.Vinculo;
 import br.com.rodrigo.api.model.dto.CadastroUsuarioDto;
@@ -30,6 +31,7 @@ import static br.com.rodrigo.api.exception.ValidationError.ERRO_DATA_SAIDA_FUNCI
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_DELETAR_USUARIO_FUNCIONARIO_EH_RESPONSAVEL_DEPARTAMENTO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_FUNCINARIO_NAO_ENCONTRADO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_PESSOA_NAO_ENCONTRADA;
+import static br.com.rodrigo.api.exception.ValidationError.ERRO_TIPO_DESCONTO_NAO_ENCONTRADO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_USUARIO_NAO_ENCONTRADO;
 import static br.com.rodrigo.api.exception.ValidationError.ERRO_VINCULO_NAO_ENCONTRADO;
 
@@ -52,6 +54,8 @@ public class FuncionarioService {
 
     private final DemissaoFuncionarioService demissaoFuncionarioService;
 
+    private final TipoDescontoService tipoDescontoService;
+
     public boolean funcionarioTemVinculoComDepartamento(Funcionario funcionario) {
         return responsavelDepartamentoService.existsByFuncionario(funcionario);
     }
@@ -63,6 +67,10 @@ public class FuncionarioService {
 
     public List<Funcionario> listaTodosFuncionarios() {
         return funcionarioRepository.findAll();
+    }
+
+    public List<Funcionario> listaTodosFuncionariosAtivos() {
+        return funcionarioRepository.findByPessoaAtivoTrue();
     }
 
     public List<DetalhesFuncionarioDto> listaTodosDetalhesFuncionarios() {
@@ -164,5 +172,22 @@ public class FuncionarioService {
         pessoaRepository.save(pessoa);
         usuarioRepository.save(usuario);
         funcionarioRepository.save(funcionario);
+    }
+
+    public Funcionario atribuirTiposDesconto(Long funcionarioId, List<Long> tipoDescontoIds) {
+        Funcionario funcionario = funcionarioRepository.findById(funcionarioId)
+                .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_FUNCINARIO_NAO_ENCONTRADO));
+
+        // Remove todos os tipos de desconto existentes
+        funcionario.getTiposDesconto().clear();
+
+        // Adiciona os novos tipos de desconto
+        List<TipoDesconto> tiposDesconto = tipoDescontoIds.stream()
+                .map(id -> tipoDescontoService.getTipoDescontoById(id)
+                        .orElseThrow(() -> new ObjetoNaoEncontradoException(ERRO_TIPO_DESCONTO_NAO_ENCONTRADO)))
+                .collect(Collectors.toList());
+
+        funcionario.getTiposDesconto().addAll(tiposDesconto);
+        return funcionarioRepository.save(funcionario);
     }
 }
