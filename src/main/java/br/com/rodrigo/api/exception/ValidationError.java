@@ -64,6 +64,10 @@ public class ValidationError extends StandardError {
 
     public static final String ERRO_TIPO_DEMISAO_NAO_ENCONTRADO = "Tipo Demissão não encontrado";
 
+    public static final String ERRO_TIPO_DESCONTO_NAO_ENCONTRADO = "Tipo Desconto não encontrado";
+
+    public static final String ERRO_GERAR_FOLHA_PAGAMENTO_TODOS = "Já existe uma folha de pagamento para o mês atual.\"";
+
     public static final String ERRO_FUNCIONARIO_RESPONSAVEL_DEPARTAMENTO = "O funcionário já é responsável por esta unidade.";
     private static final long serialVersionUID = 1L;
 

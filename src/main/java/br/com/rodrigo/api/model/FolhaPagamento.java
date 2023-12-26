@@ -48,6 +48,12 @@ public class FolhaPagamento {
     @Column(name = "desconto_inss")
     private BigDecimal descontoInss;
 
+    @Column(name = "desconto_vale_transporte")
+    private BigDecimal descontoValeTransporte;
+
+    @Column(name = "desconto_plano_de_saude")
+    private BigDecimal descontoPlanoDeSaude;
+
     @Column(name = "desconto_irrf")
     private BigDecimal descontoIrrf;
 }

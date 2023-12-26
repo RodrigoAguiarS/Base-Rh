@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.3.final using JasperReports Library version 6.2.3  -->
+<!-- 2023-12-25T22:27:31 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="folha_de_pagamento" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bab35e7a-b39a-4c7e-831f-94cd28255f7b">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="sistemarh.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="ID_FUNCIONARIO" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT 
+    e.nome as "NOME DA EMPRESA",
+    CONCAT(en.rua, ', ', en.numero, ' ', en.cidade, ' ', en.estado) AS "ENDEREÇO",
+    e.cnpj as "CNPJ",
+    td.nome as "DESCONTO",
+    td.id_tipo_desconto as "CODIGO DESCONTO",
+    f.id_funcionario as "CODIGO",
+    p.nome as "NOME",
+    p.cpf as "CPF",
+    c.nome as "CARGO",
+    f.data_entrada as "DATA_ADMISSAO",
+    fp.data_pagamento as "DATA_PAGAMENTO",
+    c.salario_base as "SALARIO_BASE",
+    fp.desconto_inss as "VALOR_INSS",
+    fp.desconto_irrf as "VALOR_IRRF",
+    fp.desconto_plano_de_saude as "VALOR_PLANO_DE_SAUDE",
+    fp.desconto_vale_transporte as "VALOR_VALE_TRANSPORTE",
+    fp.total_descontos as "TOTAL_DESCONTOS",
+    fp.id_folha_pagamento as "CODIGO_FOLHA_DE_PAGAMENTO",
+    fp.valor_liquido as "VALOR_LIQUIDO"
+FROM 
+    folha_pagamento fp 
+    JOIN funcionario f ON f.id_funcionario = fp.id_funcinario
+    JOIN pessoa p ON p.id_pessoa = f.id_pessoa
+    JOIN cargo c ON c.id_cargo = f.id_cargo
+    JOIN departamento d ON d.id_departamento = c.id_departamento
+    JOIN empresa e ON e.id_empresa = d.id_empresa
+    JOIN endereco en ON en.id_endereco = e.id_endereco
+    LEFT JOIN funcionario_tipo_desconto ftd ON ftd.id_funcionario = f.id_funcionario
+    LEFT JOIN tipo_desconto td ON td.id_tipo_desconto = ftd.id_tipo_desconto
+WHERE 
+    f.id_funcionario = $P{ID_FUNCIONARIO}
+ORDER BY 
+    fp.data_pagamento DESC
+LIMIT 1]]>
+	</queryString>
+	<field name="NOME DA EMPRESA" class="java.lang.String"/>
+	<field name="ENDEREÇO" class="java.lang.String"/>
+	<field name="CNPJ" class="java.lang.String"/>
+	<field name="DESCONTO" class="java.lang.String"/>
+	<field name="CODIGO DESCONTO" class="java.lang.Long"/>
+	<field name="CODIGO" class="java.lang.Long"/>
+	<field name="NOME" class="java.lang.String"/>
+	<field name="CPF" class="java.lang.String"/>
+	<field name="CARGO" class="java.lang.String"/>
+	<field name="DATA_ADMISSAO" class="java.sql.Date"/>
+	<field name="DATA_PAGAMENTO" class="java.sql.Date"/>
+	<field name="SALARIO_BASE" class="java.math.BigDecimal"/>
+	<field name="VALOR_INSS" class="java.math.BigDecimal"/>
+	<field name="VALOR_IRRF" class="java.math.BigDecimal"/>
+	<field name="VALOR_PLANO_DE_SAUDE" class="java.math.BigDecimal"/>
+	<field name="VALOR_VALE_TRANSPORTE" class="java.math.BigDecimal"/>
+	<field name="TOTAL_DESCONTOS" class="java.math.BigDecimal"/>
+	<field name="CODIGO_FOLHA_DE_PAGAMENTO" class="java.lang.Long"/>
+	<field name="VALOR_LIQUIDO" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="157" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="800" height="90" uuid="b73b149e-bc89-47cb-8c71-fde1cedbac06"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="350" y="7" width="450" height="30" uuid="f3a88268-59a7-4246-b6d7-1c1b6dd73df7"/>
+				<textElement textAlignment="Center">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recibo de pagamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="585" y="37" width="85" height="22" uuid="1e86d70b-647a-4ca8-bdab-f2e44612397b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mês Referência: ]]></text>
+			</staticText>
+			<textField pattern="MMMM">
+				<reportElement x="654" y="37" width="92" height="22" uuid="e5d83c25-5b49-4370-b4dc-0f527303154c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DATA_PAGAMENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="10" width="80" height="19" uuid="f37f3cb1-aa5d-4850-aa12-c241ed55d0b7"/>
+				<textElement textAlignment="Left">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[EMPREGADOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="29" width="40" height="21" uuid="ec17b7b6-5a6c-4709-8bf8-0ed28877ae80"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOME:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="57" y="29" width="100" height="21" uuid="3ff5a5a2-010a-4f80-b8c6-5067861b9352"/>
+				<textFieldExpression><![CDATA[$F{NOME DA EMPRESA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="50" width="70" height="20" uuid="497b374c-2c7d-47b3-b79f-fc361f03494d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENDEREÇO:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="83" y="50" width="177" height="20" uuid="aefe6d5a-c81c-48e6-8972-cff5ec76946a"/>
+				<textFieldExpression><![CDATA[$F{ENDEREÇO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="70" width="40" height="20" uuid="0081e036-a83f-4438-a171-2ce2fa02e20d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CNPJ:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="53" y="70" width="100" height="20" uuid="984ca55d-95b5-4692-9f9c-6a643689e362"/>
+				<textFieldExpression><![CDATA[$F{CNPJ}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="101" width="800" height="50" uuid="96f15d6a-7f66-4b5b-a392-027e9dd5e965"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="16" y="101" width="100" height="20" uuid="986ca288-f77e-4ef7-98e8-aee5c90e8f12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="101" width="269" height="20" uuid="25371d5f-a190-4e64-b8af-fe8fc1d54350"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome do funcionário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="515" y="101" width="130" height="20" uuid="670b30d7-c4fc-4b04-b4e3-ada8c167377e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="645" y="101" width="155" height="20" uuid="638b5b67-f0f1-40ab-af2c-c4aa14e7967e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data de admissão]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="385" y="101" width="130" height="20" uuid="81e814d5-a2c9-4a7e-9174-d7f1b5691eb2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPF]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="16" y="121" width="100" height="20" uuid="4c09cf0a-fb70-4706-ba0e-daf322d142dc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CODIGO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="121" width="269" height="20" uuid="6d991690-3d0c-4c18-bf47-23a384924725"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{NOME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="385" y="121" width="130" height="20" uuid="158b7b15-0409-4ecd-b8db-16c1d8970483"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CPF}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="515" y="121" width="130" height="20" uuid="02139735-d92e-4c34-8cf8-e25cc9e93dce"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CARGO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="645" y="121" width="155" height="20" uuid="e4d10b72-1aa1-4132-87ce-3274b82aaacd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DATA_ADMISSAO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="410" y="37" width="140" height="22" uuid="64a11f27-c5c9-4c76-a507-01e58b5520e1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código folha de pagamento]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="550" y="37" width="35" height="22" uuid="395a1ba5-2b24-4894-8de1-f5e210f69ce4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CODIGO_FOLHA_DE_PAGAMENTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="148" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="-1" width="800" height="30" backcolor="#F2F2F2" uuid="d058caec-4b7c-46a5-85f4-0db3f8334076"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="-1" width="100" height="30" uuid="7bfe6c73-0922-40f3-ae9e-822716bb3a8b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="-1" width="350" height="30" uuid="c5ede3eb-03b0-4ec3-9fc8-dbfc450abfa3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="-1" width="203" height="30" uuid="afb6ca36-48a5-496b-b9d0-452c018138ec"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proventos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="673" y="-1" width="126" height="30" uuid="efec21d6-f996-4ceb-8b65-716733138de6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descontos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="29" width="350" height="20" uuid="e59db6e9-465d-4fb1-9264-075cb92b9eaa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Salario Base]]></text>
+			</staticText>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
+				<reportElement x="470" y="29" width="203" height="20" uuid="d4b3ee63-24ab-48e7-95de-7a41c58daad9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{SALARIO_BASE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="100" y="50" width="350" height="20" uuid="4472c0b7-e1bc-4e5d-937c-7ade119ede1c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[INSS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="71" width="350" height="20" uuid="80e80457-bd74-4fd2-98e2-f401fe08b3bd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[IRRF]]></text>
+			</staticText>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="673" y="49" width="128" height="21" uuid="d0644967-2e83-4be7-a7f0-15f3206bef2b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{VALOR_INSS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="673" y="70" width="128" height="23" uuid="451fdae5-8e12-4cbd-8868-744c13f8ac65"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{VALOR_IRRF}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="673" y="92" width="128" height="18" uuid="45c125f1-f38e-44bd-b225-012bbfb0f1c9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VALOR_PLANO_DE_SAUDE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="100" y="109" width="350" height="20" uuid="c316dd31-22ff-425d-926a-2cca9e940ecf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Vale transporte]]></text>
+			</staticText>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="673" y="110" width="128" height="18" uuid="4cc2846e-f2c4-40e8-bfa1-fab519bf4b21"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{VALOR_VALE_TRANSPORTE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="49" width="800" height="1" uuid="f4a315b1-96e3-4ecb-90ce-2954036b93d2"/>
+			</line>
+			<line>
+				<reportElement x="0" y="70" width="800" height="1" uuid="863009fd-a830-4869-a317-c36e6bc2c9c2"/>
+			</line>
+			<line>
+				<reportElement x="1" y="91" width="800" height="1" uuid="43e9f9a4-837b-4cb7-b773-3b70e7fbcb7b"/>
+			</line>
+			<line>
+				<reportElement x="1" y="110" width="800" height="1" uuid="d69a4ae0-141f-4377-9569-d78a02b545f6"/>
+			</line>
+			<line>
+				<reportElement x="1" y="129" width="800" height="1" uuid="ae1a1daf-ff84-4db9-a644-18bdf3dc6106"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="91" width="100" height="20" uuid="77aa5084-3d0e-4cee-b1d1-47a6d121a99f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="91" width="350" height="20" uuid="78ac0318-ff3e-4e55-aa93-0bb05433efa7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Plano de saúde]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="111" width="100" height="19" uuid="cd2c2ddc-8c14-4551-a12a-66191c68a030"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="29" width="100" height="20" uuid="ccd80a61-4d99-4200-a8dd-a7f40414eec5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="71" width="100" height="20" uuid="4bd9dbff-1152-436a-81f6-513d48171e47"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="100" height="20" uuid="86cd2078-4cc2-40ca-97a7-843ba9f53f32"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[5]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<columnFooter>
+		<band height="116" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="799" height="40" uuid="3366e0c1-9bc3-4428-81ce-80ae359180a5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="40" width="800" height="30" uuid="b6d149dd-870d-4ff8-a23f-a03e3c6f9714"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="673" y="0" width="127" height="40" uuid="1ccb2969-77df-423b-92c7-d478eb0028db"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="550" y="0" width="125" height="40" uuid="ae83aea4-c76e-42b2-a1a6-0a1dc4ddce64"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="551" y="0" width="125" height="20" uuid="25bdceb9-b537-446e-9ac2-02f1efa9113b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total dos vencimentos]]></text>
+			</staticText>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="550" y="20" width="125" height="20" uuid="fa2102e1-e929-4c02-a093-2666ed3221d1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{SALARIO_BASE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="676" y="0" width="124" height="20" uuid="0a9be539-e746-45de-bc36-cfa63a1ca5de"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total dos descontos]]></text>
+			</staticText>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="675" y="20" width="124" height="20" uuid="76635adb-0d7f-40ff-ad68-7be7f6012ff0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{TOTAL_DESCONTOS}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="550" y="40" width="125" height="30" uuid="1fc1cf30-1487-4635-9865-a7f61e02a688"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="550" y="40" width="125" height="30" uuid="7f3153c2-8301-4c59-88ec-eb83fc198383"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Líquido a receber]]></text>
+			</staticText>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="675" y="40" width="124" height="30" uuid="610d2cd4-552e-407e-b575-cd5c20a27548"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{VALOR_LIQUIDO}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="70" width="799" height="40" uuid="88ba6be8-5ede-45c1-85c0-432991ca2cd8"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="40" y="70" width="100" height="20" uuid="19348a7b-5f1f-4dba-b9cf-2c897dcc9e61"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Salário base ]]></text>
+			</staticText>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="40" y="90" width="100" height="20" uuid="7ecb580e-b147-459c-bf3c-b5fee4109cff"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{SALARIO_BASE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="140" y="70" width="100" height="20" uuid="9f8020c3-230e-4464-a05e-2e2df46b1062"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Base cálculo INSS]]></text>
+			</staticText>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="140" y="90" width="100" height="20" uuid="6e3f1b67-d361-47b1-99c7-b3cd56172e94"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SALARIO_BASE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="320" y="70" width="100" height="18" uuid="930e7a22-0f74-4e9b-8697-0a48558e8ccd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FGTS Mês]]></text>
+			</staticText>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="320" y="88" width="100" height="22" uuid="eb8dbfd4-4f12-4a59-b36d-4ef3dd5f40ed"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{VALOR_INSS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="515" y="69" width="100" height="20" uuid="5c0049fb-5b5e-4f2d-8cc8-09330fd0b148"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Base cálculo IRRF]]></text>
+			</staticText>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="515" y="89" width="100" height="20" uuid="9e11b651-7953-4bea-bc67-08b16229aa3d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{SALARIO_BASE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="699" y="70" width="100" height="20" uuid="28a33336-fa9c-411f-89d7-ea69a97588be"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[IRRF Mês]]></text>
+			</staticText>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="699" y="90" width="100" height="20" uuid="f7c73a68-98ed-4f70-a4ca-db18c9e94999"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{VALOR_IRRF}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

@@ -8,8 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -37,5 +41,13 @@ public class Funcionario {
 
     @Column(name = "data_saida")
     private LocalDate dataSaida;
+
+    @ManyToMany
+    @JoinTable(
+            name = "funcionario_tipo_desconto",
+            joinColumns = @JoinColumn(name = "id_funcionario"),
+            inverseJoinColumns = @JoinColumn(name = "id_tipo_desconto")
+    )
+    private Set<TipoDesconto> tiposDesconto = new HashSet<>();
 
 }
